@@ -1,26 +1,176 @@
+/* ———————————————————————————————————— google fonts ——— */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap");
+
+/* ———————————————————————————————————— tailwind ——— */
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+/* ———————————————————————————————————— base layer ——— */
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --color-bg: #f4f4f8; /* primary background */
+    --color-accent: #1000f5; /* primary blue */
+    --color-text: #171717; /* normal text */
+    --color-panel: #ffffff; /* panel background */
+    --color-secondary: #e5e5ed; /* secondary background */
+    --color-muted: #b0b0b0; /* muted text */
+    --color-border: #d9d9e2; /* dividers */
+    --color-yellow: #ffc21a; /* yellow accent */
+    --color-navy: #123456; /* navy accent */
+    --color-accent-dark: #102B50; /* darker blue / hover */
+
+    --font-heading: "Playfair Display", serif;
+    --font-body: "Inter", sans-serif;
+    --font-alt: "Manrope", sans-serif;
+    --font-tall: "Playfair Display", serif;
+  }
+
+  body {
+    @apply bg-(--color-bg) text-(--color-text);
+    font-family: var(--font-body);
+  }
+
+  h1,
+  h3,
+  h4 {
+    font-family: var(--font-heading);
+    letter-spacing: 1px;
+  }
+
+  p,
+  h2,
+  span,
+  li {
+    font-family: var(--font-body);
+  }
+
+  button {
+    font-family: var(--font-heading);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ———————————————————————————————————— utilities layer ——— */
+@layer utilities {
+  .bg-brand {
+    background-color: var(--color-bg);
+  }
+
+  .bg-panel {
+    background-color: var(--color-panel);
+  }
+
+  .bg-second {
+    background-color: var(--color-secondary);
+  }
+
+  .bg-accent {
+    background-color: var(--color-accent);
+  }
+
+  .bg-muted {
+    background-color: var(--color-muted);
+  }
+
+  .bg-yellow {
+    background-color: var(--color-yellow);
+  }
+
+  .bg-navy {
+    background-color: var(--color-navy);
+  }
+
+  .bg-text {
+    background-color: var(--color-text);
+  }
+
+  .text-brand {
+    color: var(--color-bg);
+  }
+
+  .text-accent {
+    color: var(--color-accent);
+  }
+
+  .text-normal {
+    color: var(--color-text);
+  }
+
+  .text-muted {
+    color: var(--color-muted);
+  }
+
+  .text-yellow {
+    color: var(--color-yellow);
+  }
+
+  .text-navy {
+    color: var(--color-navy);
+  }
+
+  .font-heading {
+    font-family: var(--font-heading);
+  }
+
+  .font-normal {
+    font-family: var(--font-body);
+  }
+
+  .font-alt {
+    font-family: var(--font-alt);
+  }
+
+  .font-tall {
+    font-family: var(--font-tall);
+  }
+
+  .border-accent {
+    border-color: var(--color-accent);
+  }
+
+  .border-panel {
+    border-color: var(--color-panel);
+  }
+}
+
+/* ———————————————————————————————————— scrollbars ——— */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+  scrollbar-gutter: stable;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.custom-scroll {
+  overflow-y: auto;
+  scroll-bar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+.custom-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+  background: var(--color-panel);
+  border-radius: 8px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.custom-scroll:hover::-webkit-scrollbar-thumb {
+  opacity: 1;
+}
+
+.custom-scroll {
+  overflow-y: auto;
+}
+
+.custom-scroll:hover {
+  scrollbar-color: var(--color-panel) transparent;
 }
