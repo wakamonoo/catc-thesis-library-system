@@ -1,7 +1,7 @@
 import sample from "@/assets/hero-img.webp";
 import Image from "next/image";
 import { BiBook, BiCalendar } from "react-icons/bi";
-import { BsPerson } from "react-icons/bs";
+import { BsArrowRight, BsPerson } from "react-icons/bs";
 import { FaPerson } from "react-icons/fa6";
 
 const sampleData = [
@@ -34,16 +34,25 @@ const sampleData = [
 
 export default function Featured() {
   return (
-    <div className="py-16">
-      <div className="flex items-center gap-2">
-        <div className="w-12 h-px bg-yellow" />
-        <p className="font-alt tracking-widest text-base uppercase font-semibold text-yellow">
-          Featured Thesis
-        </p>
+    <div id="featured" className="py-16">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 justify-between">
+        <div className="flex flex-col">
+          <div className="flex items-center gap-2">
+            <div className="w-12 h-px bg-yellow" />
+            <p className="font-alt tracking-widest text-base uppercase font-semibold text-yellow">
+              Featured Thesis
+            </p>
+          </div>
+          <p className="text-normal text-base leading-tight">
+            Explore some of the latest and most relevant theses from CAT
+            College.
+          </p>
+        </div>
+        <button className="cursor-pointer flex items-center gap-2">
+          <p className="text-sm text-muted whitespace-nowrap">Browse All</p>
+          <BsArrowRight className="text-sm text-muted" />
+        </button>
       </div>
-      <p className="text-normal text-base leading-tight">
-        Explore some of the latest and most relevant theses from CAT College.
-      </p>
       <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
         {sampleData.map((thesis) => {
           return (
@@ -58,7 +67,7 @@ export default function Featured() {
                   fill
                   className="object-cover"
                 />
-                <div className="absolute top-2 right-2 flex items-center gap-0.5 px-4 py-2 bg-(--color-accent)/60 rounded-lg w-fit">
+                <div className="absolute top-2 right-0 flex items-center gap-0.5 px-4 py-2 bg-(--color-accent)/80 rounded-tl-lg rounded-bl-lg w-fit">
                   <BiBook className="text-xs text-brand" />
                   <p className="text-xs text-brand">{thesis.category}</p>
                 </div>

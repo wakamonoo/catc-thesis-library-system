@@ -1,0 +1,83 @@
+import {
+  BiLaptop,
+  BiBulb,
+  BiChip,
+  BiShield,
+  BiLock,
+  BiCode,
+  BiBook,
+  BiCalculator,
+  BiBriefcase,
+  BiCar,
+  BiWrench,
+  BiDesktop,
+  BiBuilding,
+} from "react-icons/bi";
+
+const sampleData = [
+  { id: 1, icon: BiLaptop, title: "Computer Engineering" },
+  { id: 2, icon: BiBulb, title: "Electrical Engineering" },
+  { id: 3, icon: BiChip, title: "Electronics Engineering" },
+  { id: 4, icon: BiShield, title: "Criminology" },
+  { id: 5, icon: BiLock, title: "Industrial Security Management" },
+  { id: 6, icon: BiCode, title: "Information Technology" },
+  { id: 7, icon: BiDesktop, title: "Computer Science" },
+  { id: 8, icon: BiBook, title: "Office Administration" },
+  {
+    id: 9,
+    icon: BiCalculator,
+    title: "Business Administration Major in Financial Management",
+  },
+  {
+    id: 10,
+    icon: BiBriefcase,
+    title: "Business Administration Major in Marketing Management",
+  },
+  {
+    id: 11,
+    icon: BiCar,
+    title: "Engineering Technology Major in Automotive Technology",
+  },
+  {
+    id: 12,
+    icon: BiWrench,
+    title: "Engineering Technology Major in Electronics Technology",
+  },
+  { id: 13, icon: BiBuilding, title: "Associate in Computer Technology" },
+];
+
+export default function Categories() {
+  return (
+    <div id="categories" className="py-16">
+      <div className="flex flex-col">
+        <div className="flex items-center gap-2">
+          <div className="w-12 h-px bg-yellow" />
+          <p className="font-alt tracking-widest text-base uppercase font-semibold text-yellow">
+            College Programs
+          </p>
+        </div>
+        <p className="text-normal text-base leading-tight">
+          Explore theses and research from our diverse college programs.
+        </p>
+      </div>
+      <div className="mt-4 grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
+        {sampleData.map((category) => {
+          const Icon = category.icon;
+
+          return (
+            <div
+              key={category.id}
+              className="flex flex-col items-center justify-center gap-2 p-4 rounded bg-second shadow-md"
+            >
+              <Icon className="text-2xl" />
+              <p className="text-sm text-normal text-center font-semibold line-clamp-2">
+                {category.title}
+              </p>
+              <div className="w-full h-px bg-yellow" />
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}

@@ -1,13 +1,35 @@
+"use client";
 import Logo from "@/assets/catc-logo.jpg";
+import { NavigationContext } from "@/context/navigationContext";
 import Image from "next/image";
+import { useContext, useEffect, useState } from "react";
 import { BiMenu } from "react-icons/bi";
 import { FaUser } from "react-icons/fa";
 
 export default function NavBar() {
+  const [scrolled, setScrolled] = useState(false);
+  const { active, handleHomeClick, handleFeaturedClick } =
+    useContext(NavigationContext);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
-    <div className="fixed z-100 w-full flex justify-between items-center p-8 md:px-16 lg:px-32 xl:px-64 h-14">
+    <div
+      className={`fixed z-100 w-full flex justify-between items-center p-8 md:px-16 lg:px-32 xl:px-64 h-14 transition-all duration-200 ${scrolled ? "bg-accent" : "bg-transparent"}`}
+    >
       <div className="flex items-center gap-2">
-        <button className="cursor-pointer">
+        <button onClick={handleHomeClick} className="cursor-pointer">
           <div className="w-12 h-auto">
             <Image
               src={Logo}
@@ -26,11 +48,19 @@ export default function NavBar() {
         </div>
       </div>
       <div className="hidden lg:flex items-center gap-12">
-        <button>
-          <p className="font-alt text-sm font-bold text-brand">Home</p>
+        <button onClick={handleHomeClick} className="cursor-pointer">
+          <p
+            className={`font-alt text-sm font-bold transition-all duration-200 ${active === "hero" ? "text-yellow underline underline-offset-8 decoration-2" : "text-brand"}`}
+          >
+            Home
+          </p>
         </button>
-        <button>
-          <p className="font-alt text-sm font-bold text-brand">Featured</p>
+        <button onClick={handleFeaturedClick} className="cursor-pointer">
+          <p
+            className={`font-alt text-sm font-bold transition-all duration-200 ${active === "featured" ? "text-yellow underline underline-offset-8 decoration-2" : "text-brand"}`}
+          >
+            Featured
+          </p>
         </button>
         <button>
           <p className="font-alt text-sm font-bold text-brand">Browse</p>

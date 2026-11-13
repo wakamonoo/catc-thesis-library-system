@@ -4,7 +4,10 @@ import { BiSearch } from "react-icons/bi";
 
 export default function Hero() {
   return (
-    <div className="relative w-full py-16 md:min-h-screen md:flex md:items-center">
+    <div
+      id="hero"
+      className="relative w-full py-16 md:min-h-screen md:flex md:items-center"
+    >
       <div className="absolute inset-0">
         <Image
           src={heroImg}

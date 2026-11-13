@@ -1,4 +1,4 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { NavigationProvider } from "@/context/navigationContext";
 import "./globals.css";
 import NavBar from "@/components/layout/essentials/navbar";
 
@@ -11,8 +11,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`scroll-smooth`}>
       <body className="min-h-full flex flex-col">
-        <NavBar />
-        {children}
+        <NavigationProvider>
+          <NavBar />
+          {children}
+        </NavigationProvider>
       </body>
     </html>
   );
