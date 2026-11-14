@@ -38,8 +38,8 @@ export default function Featured() {
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 justify-between">
         <div className="flex flex-col">
           <div className="flex items-center gap-2">
-            <div className="w-12 h-px bg-accent" />
-            <p className="font-alt tracking-widest text-base uppercase font-semibold text-accent">
+            <div className="w-12 h-px bg-yellow" />
+            <p className="font-alt tracking-widest text-base uppercase font-semibold text-yellow">
               Featured Theses
             </p>
           </div>

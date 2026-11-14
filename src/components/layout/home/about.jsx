@@ -73,8 +73,8 @@ export default function About() {
           );
         })}
       </div>
-      <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-        <div className="relative h-84 rounded-2xl overflow-hidden">
+      <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
+        <div className="relative min-h-0 rounded-2xl overflow-hidden">
           <Image
             src={sample}
             alt="CATC Library"
@@ -98,18 +98,10 @@ export default function About() {
               Our Collections
             </p>
           </div>
-          <p className="mt-4 text-base text-muted leading-relaxed">
+          <p className="mt-4 text-base text-normal leading-relaxed">
             The CAT-C Thesis Collection is a centralized platform that brings
             together academic research and thesis works from various college
-            programs of CAT-C. It provides students and researchers with an
-            organized way to discover, explore, and access scholarly works
-            produced within the institution.
-          </p>
-          <p className="mt-4 text-base text-muted leading-relaxed">
-            By making these research materials easier to find, the collection
-            encourages knowledge sharing, supports academic learning, and helps
-            preserve the research contributions of students across different
-            disciplines.
+            programs of CAT-C.
           </p>
           <div className="mt-4">
             <button className="flex items-center gap-2 px-4 py-2 bg-accent rounded-full">

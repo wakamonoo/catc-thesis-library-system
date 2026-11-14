@@ -40,6 +40,14 @@ export const NavigationProvider = ({ children }) => {
     setActive("categories");
   };
 
+  const handleAboutClick = () => {
+    document
+      .getElementById("about")
+      ?.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    setActive("about");
+  };
+
   return (
     <NavigationContext.Provider
       value={{
@@ -47,6 +55,7 @@ export const NavigationProvider = ({ children }) => {
         handleHomeClick,
         handleFeaturedClick,
         handleCategoriesClick,
+        handleAboutClick,
       }}
     >
       {children}
