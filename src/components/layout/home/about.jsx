@@ -74,7 +74,7 @@ export default function About() {
         })}
       </div>
       <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
-        <div className="relative min-h-0 rounded-2xl overflow-hidden">
+        <div className="relative h-62 md:h-auto rounded-2xl overflow-hidden">
           <Image
             src={sample}
             alt="CATC Library"
