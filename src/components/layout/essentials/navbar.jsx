@@ -8,8 +8,12 @@ import { FaUser } from "react-icons/fa";
 
 export default function NavBar() {
   const [scrolled, setScrolled] = useState(false);
-  const { active, handleHomeClick, handleFeaturedClick } =
-    useContext(NavigationContext);
+  const {
+    active,
+    handleHomeClick,
+    handleFeaturedClick,
+    handleCategoriesClick,
+  } = useContext(NavigationContext);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -62,8 +66,12 @@ export default function NavBar() {
             Featured
           </p>
         </button>
-        <button>
-          <p className="font-alt text-sm font-bold text-brand">Browse</p>
+        <button onClick={handleCategoriesClick} className="cursor-pointer">
+          <p
+            className={`font-alt text-sm font-bold transition-all duration-200 ${active === "categories" ? "text-yellow underline underline-offset-8 decoration-2" : "text-brand"}`}
+          >
+            Browse
+          </p>
         </button>
         <button>
           <p className="font-alt text-sm font-bold text-brand">About</p>
@@ -72,7 +80,7 @@ export default function NavBar() {
       <div className="hidden lg:block">
         <button className="flex items-center gap-2 px-4 py-2 border border-panel rounded-full">
           <FaUser className="text-base text-brand shrink-0" />
-          <p className="text-sm text-brand">Sign In</p>
+          <p className="text-sm text-brand font-bold">Sign In</p>
         </button>
       </div>
       <div className="block lg:hidden">

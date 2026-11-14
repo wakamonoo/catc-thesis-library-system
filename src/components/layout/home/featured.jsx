@@ -40,7 +40,7 @@ export default function Featured() {
           <div className="flex items-center gap-2">
             <div className="w-12 h-px bg-yellow" />
             <p className="font-alt tracking-widest text-base uppercase font-semibold text-yellow">
-              Featured Thesis
+              Featured Theses
             </p>
           </div>
           <p className="text-normal text-base leading-tight">
@@ -53,38 +53,39 @@ export default function Featured() {
           <BsArrowRight className="text-sm text-muted" />
         </button>
       </div>
-      <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+      <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
         {sampleData.map((thesis) => {
           return (
             <div
               key={thesis.id}
-              className="flex flex-col bg-second shadow-lg rounded-lg overflow-hidden"
+              className="flex flex-col bg-panel shadow-xs rounded-lg overflow-hidden"
             >
-              <div className="relative w-full h-50">
+              <div className="relative w-full h-44">
                 <Image
                   src={thesis.image}
                   alt={thesis.title}
                   fill
                   className="object-cover"
                 />
-                <div className="absolute top-2 right-0 flex items-center gap-0.5 px-4 py-2 bg-(--color-accent)/80 rounded-tl-lg rounded-bl-lg w-fit">
+                <div className="absolute top-2 right-2 flex items-center gap-0.5 px-4 py-2 bg-(--color-accent)/90 rounded-full w-fit">
                   <BiBook className="text-xs text-brand" />
                   <p className="text-xs text-brand">{thesis.category}</p>
                 </div>
               </div>
 
-              <div className="p-4 border-l-4 border-(--color-yellow)">
-                <p className="mt-2 font-heading text-base font-semibold leading-tight">
+              <div className="p-4 border-b-8 border-accent">
+                <p className="mt-2 font-alt tracking-wide text-base font-semibold leading-tight">
                   {thesis.title}
                 </p>
-                <div className="mt-2">
+                <div className="mt-4 flex gap-4">
                   <div className="flex items-center gap-2">
-                    <BsPerson className="text-sm text-normal shrink-0" />
-                    <p className="text-sm text-normal">{thesis.author}</p>
+                    <BsPerson className="text-sm text-muted shrink-0" />
+                    <p className="text-sm text-muted">{thesis.author}</p>
                   </div>
+                  <div className="w-px h-4 bg-muted" />
                   <div className="flex items-center gap-2">
-                    <BiCalendar className="text-sm text-normal shrink-0" />
-                    <p className="text-sm text-normal">{thesis.date}</p>
+                    <BiCalendar className="text-sm text-muted shrink-0" />
+                    <p className="text-sm text-muted">{thesis.date}</p>
                   </div>
                 </div>
               </div>

@@ -32,12 +32,21 @@ export const NavigationProvider = ({ children }) => {
     setActive("featured");
   };
 
+  const handleCategoriesClick = () => {
+    document
+      .getElementById("categories")
+      ?.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    setActive("categories");
+  };
+
   return (
     <NavigationContext.Provider
       value={{
         active,
         handleHomeClick,
         handleFeaturedClick,
+        handleCategoriesClick,
       }}
     >
       {children}
