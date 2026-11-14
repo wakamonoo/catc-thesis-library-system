@@ -8,7 +8,7 @@
 @layer base {
   :root {
     --color-bg: #f4f4f8; /* primary background */
-    --color-accent: #1000f5; /* primary blue */
+    --color-accent: #102b50; /* primary blue #102B50 */
     --color-text: #171717; /* normal text */
     --color-panel: #ffffff; /* panel background */
     --color-secondary: #e5e5ed; /* secondary background */
@@ -16,7 +16,7 @@
     --color-border: #d9d9e2; /* dividers */
     --color-yellow: #ffc21a; /* yellow accent */
     --color-navy: #123456; /* navy accent */
-    --color-accent-dark: #102B50; /* darker blue / hover */
+    --color-accent-dark: #102b50; /* darker blue / hover */
 
     --font-heading: "Playfair Display", serif;
     --font-body: "Inter", sans-serif;

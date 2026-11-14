@@ -34,7 +34,7 @@ const features = [
 
 export default function About() {
   return (
-    <div id="about" className="py-16">
+    <div id="about" className="p-8 md:p-16 lg:px-32 xl:px-64">
       <div className="flex flex-col">
         <div className="flex items-center gap-2">
           <div className="w-12 h-px bg-yellow" />
@@ -113,7 +113,9 @@ export default function About() {
           </p>
           <div className="mt-4">
             <button className="flex items-center gap-2 px-4 py-2 bg-accent rounded-full">
-              <p className="text-sm text-brand font-bold">Explore the Collection</p>
+              <p className="text-sm text-brand font-bold">
+                Explore the Collection
+              </p>
               <BiChevronRight className="text-base text-brand shrink-0" />
             </button>
           </div>

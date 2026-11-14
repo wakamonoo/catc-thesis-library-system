@@ -34,12 +34,12 @@ const sampleData = [
 
 export default function Featured() {
   return (
-    <div id="featured" className="py-16">
+    <div id="featured" className="p-8 md:p-16 lg:px-32 xl:px-64">
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 justify-between">
         <div className="flex flex-col">
           <div className="flex items-center gap-2">
-            <div className="w-12 h-px bg-yellow" />
-            <p className="font-alt tracking-widest text-base uppercase font-semibold text-yellow">
+            <div className="w-12 h-px bg-accent" />
+            <p className="font-alt tracking-widest text-base uppercase font-semibold text-accent">
               Featured Theses
             </p>
           </div>

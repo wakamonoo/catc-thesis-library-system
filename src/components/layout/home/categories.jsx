@@ -51,7 +51,7 @@ const sampleData = [
 
 export default function Categories() {
   return (
-    <div id="categories" className="py-16">
+    <div id="categories" className="p-8 md:p-16 lg:px-32 xl:px-64">
       <div className="flex flex-col">
         <div className="flex items-center gap-2">
           <div className="w-12 h-px bg-yellow" />
@@ -63,24 +63,19 @@ export default function Categories() {
           Explore theses and research from our diverse college programs.
         </p>
       </div>
-      <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="mt-8 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
         {sampleData.map((category) => {
           const Icon = category.icon;
 
           return (
             <div
               key={category.id}
-              className="flex items-center gap-4 p-4 rounded-lg bg-panel shadow-xs"
+              className="flex flex-col items-center gap-2 p-4 rounded-lg bg-accent shadow-xs"
             >
-              <div className="p-2 rounded-full bg-second">
-                <Icon className="text-2xl shrink-0" />
-              </div>
-              <p className="text-sm text-normal font-semibold line-clamp-2">
+              <Icon className="text-4xl text-yellow shrink-0" />
+              <p className="text-sm text-brand text-center font-semibold line-clamp-2">
                 {category.title}
               </p>
-              <button className="ml-auto">
-                <BiChevronRight className="text-base shrink-0" />
-              </button>
             </div>
           );
         })}
