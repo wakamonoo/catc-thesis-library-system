@@ -86,6 +86,10 @@
     color: var(--color-bg);
   }
 
+  .text-panel {
+    color: var(--color-panel);
+  }
+
   .text-accent {
     color: var(--color-accent);
   }

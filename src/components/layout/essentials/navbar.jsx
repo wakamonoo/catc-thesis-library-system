@@ -1,6 +1,9 @@
 "use client";
 import Logo from "@/assets/catc-logo.jpg";
+import PrimaryButton from "@/components/buttons/primaryButton";
+import LogInModal from "@/components/modals/signInModal";
 import MenuOptions from "@/components/options/menuOptions";
+import { AuthenticationContext } from "@/context/authenticationContext";
 import { NavigationContext } from "@/context/navigationContext";
 import Image from "next/image";
 import { useContext, useEffect, useRef, useState } from "react";
@@ -11,6 +14,7 @@ import { FaXmark } from "react-icons/fa6";
 export default function NavBar() {
   const [scrolled, setScrolled] = useState(false);
   const [showMenuOptions, setShowMenuOptions] = useState(false);
+  const { setShowSignInModal } = useContext(AuthenticationContext);
   const {
     active,
     handleHomeClick,
@@ -49,7 +53,7 @@ export default function NavBar() {
             </div>
           </button>
           <div className="flex flex-col justify-center mt-2.5">
-            <h4 className="text-lg text-brand font-heading font-bold leading-2.5">
+            <h4 className="text-lg text-panel font-heading font-bold leading-2.5">
               CAT-C
             </h4>
             <p className="text-xs font-alt text-muted">
@@ -60,7 +64,7 @@ export default function NavBar() {
         <div className="hidden lg:flex items-center gap-12">
           <button onClick={handleHomeClick} className="cursor-pointer group">
             <p
-              className={`font-alt text-sm font-bold transition-all duration-200 group-hover:text-(--color-yellow) group-active:text-(--color-yellow) ${active === "hero" ? "text-yellow underline underline-offset-8 decoration-2" : "text-brand"}`}
+              className={`font-alt text-sm font-bold transition-all duration-200 group-hover:text-(--color-yellow) group-active:text-(--color-yellow) ${active === "hero" ? "text-yellow underline underline-offset-8 decoration-2" : "text-panel"}`}
             >
               Home
             </p>
@@ -70,7 +74,7 @@ export default function NavBar() {
             className="cursor-pointer group"
           >
             <p
-              className={`font-alt text-sm font-bold transition-all duration-200 group-hover:text-(--color-yellow) group-active:text-(--color-yellow) ${active === "featured" ? "text-yellow underline underline-offset-8 decoration-2" : "text-brand"}`}
+              className={`font-alt text-sm font-bold transition-all duration-200 group-hover:text-(--color-yellow) group-active:text-(--color-yellow) ${active === "featured" ? "text-yellow underline underline-offset-8 decoration-2" : "text-panel"}`}
             >
               Featured
             </p>
@@ -80,24 +84,29 @@ export default function NavBar() {
             className="cursor-pointer group"
           >
             <p
-              className={`font-alt text-sm font-bold transition-all duration-200 group-hover:text-(--color-yellow) group-active:text-(--color-yellow) ${active === "categories" ? "text-yellow underline underline-offset-8 decoration-2" : "text-brand"}`}
+              className={`font-alt text-sm font-bold transition-all duration-200 group-hover:text-(--color-yellow) group-active:text-(--color-yellow) ${active === "categories" ? "text-yellow underline underline-offset-8 decoration-2" : "text-panel"}`}
             >
               Browse
             </p>
           </button>
           <button onClick={handleAboutClick} className="cursor-pointer group">
             <p
-              className={`font-alt text-sm font-bold transition-all duration-200 group-hover:text-(--color-yellow) group-active:text-(--color-yellow) ${active === "about" ? "text-yellow underline underline-offset-8 decoration-2" : "text-brand"}`}
+              className={`font-alt text-sm font-bold transition-all duration-200 group-hover:text-(--color-yellow) group-active:text-(--color-yellow) ${active === "about" ? "text-yellow underline underline-offset-8 decoration-2" : "text-panel"}`}
             >
               About
             </p>
           </button>
         </div>
         <div className="hidden lg:block">
-          <button className="flex items-center gap-2 px-4 py-2 border border-panel rounded-full">
-            <FaUser className="text-base text-brand shrink-0" />
-            <p className="text-sm text-brand font-bold">Sign In</p>
-          </button>
+          <PrimaryButton
+            onClick={() => setShowSignInModal(true)}
+            className="cursor-pointer flex items-center gap-2 px-4 py-2 border border-panel rounded-full transition-all duration-200 group hover:bg-(--color-panel) hover:border-(--color-yellow) active:bg-(--color-panel) active:border-(--color-yellow)"
+          >
+            <FaUser className="text-base text-panel shrink-0" />
+            <p className="text-sm text-panel font-bold tracking-wide">
+              Sign In
+            </p>
+          </PrimaryButton>
         </div>
         <div className="block lg:hidden">
           <button
@@ -106,9 +115,9 @@ export default function NavBar() {
             className="cursor-pointer group"
           >
             {showMenuOptions ? (
-              <FaXmark className="text-2xl text-brand transition-all duration-200 group-hover:text-(--color-yellow) group-active:text-(--color-yellow)" />
+              <FaXmark className="text-2xl text-panel transition-all duration-200 group-hover:text-(--color-yellow) group-active:text-(--color-yellow)" />
             ) : (
-              <FaBars className="text-2xl text-brand transition-all duration-200 group-hover:text-(--color-yellow) group-active:text-(--color-yellow)" />
+              <FaBars className="text-2xl text-panel transition-all duration-200 group-hover:text-(--color-yellow) group-active:text-(--color-yellow)" />
             )}
           </button>
         </div>

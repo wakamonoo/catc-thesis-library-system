@@ -83,10 +83,10 @@ export default function About() {
           />
           <div className="absolute inset-0 bg-linear-to-t from-(--color-accent-dark)/80 to-transparent" />
           <div className="absolute bottom-4 left-4">
-            <p className="text-xs text-brand uppercase tracking-widest">
+            <p className="text-xs text-panel uppercase tracking-widest">
               CAT-C
             </p>
-            <p className="font-alt text-xl text-brand font-semibold">
+            <p className="font-alt text-xl text-panel font-semibold">
               Discover. Explore. Learn
             </p>
           </div>
@@ -105,10 +105,10 @@ export default function About() {
           </p>
           <div className="mt-4">
             <button className="flex items-center gap-2 px-4 py-2 bg-accent rounded-full">
-              <p className="text-sm text-brand font-bold">
+              <p className="text-sm text-panel font-bold">
                 Explore the Collection
               </p>
-              <BiChevronRight className="text-base text-brand shrink-0" />
+              <BiChevronRight className="text-base text-panel shrink-0" />
             </button>
           </div>
         </div>

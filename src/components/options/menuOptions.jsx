@@ -57,14 +57,14 @@ export default function MenuOptions({
       <div className="flex flex-col gap-4 items-start">
         <button onClick={handleHomeClick} className="cursor-pointer group">
           <p
-            className={`font-alt text-sm font-bold transition-all duration-200 group-hover:text-(--color-yellow) group-active:text-(--color-yellow) ${active === "hero" ? "text-yellow" : "text-brand"}`}
+            className={`font-alt text-sm font-bold transition-all duration-200 group-hover:text-(--color-yellow) group-active:text-(--color-yellow) ${active === "hero" ? "text-yellow" : "text-panel"}`}
           >
             Home
           </p>
         </button>
         <button onClick={handleFeaturedClick} className="cursor-pointer group">
           <p
-            className={`font-alt text-sm font-bold transition-all duration-200 group-hover:text-(--color-yellow) group-active:text-(--color-yellow) ${active === "featured" ? "text-yellow" : "text-brand"}`}
+            className={`font-alt text-sm font-bold transition-all duration-200 group-hover:text-(--color-yellow) group-active:text-(--color-yellow) ${active === "featured" ? "text-yellow" : "text-panel"}`}
           >
             Featured
           </p>
@@ -74,14 +74,14 @@ export default function MenuOptions({
           className="cursor-pointer group"
         >
           <p
-            className={`font-alt text-sm font-bold transition-all duration-200 group-hover:text-(--color-yellow) group-active:text-(--color-yellow) ${active === "categories" ? "text-yellow" : "text-brand"}`}
+            className={`font-alt text-sm font-bold transition-all duration-200 group-hover:text-(--color-yellow) group-active:text-(--color-yellow) ${active === "categories" ? "text-yellow" : "text-panel"}`}
           >
             Browse
           </p>
         </button>
         <button onClick={handleAboutClick} className="cursor-pointer group">
           <p
-            className={`font-alt text-sm font-bold transition-all duration-200 group-hover:text-(--color-yellow) group-active:text-(--color-yellow) ${active === "about" ? "text-yellow" : "text-brand"}`}
+            className={`font-alt text-sm font-bold transition-all duration-200 group-hover:text-(--color-yellow) group-active:text-(--color-yellow) ${active === "about" ? "text-yellow" : "text-panel"}`}
           >
             About
           </p>
@@ -89,8 +89,8 @@ export default function MenuOptions({
       </div>
       <div className="flex-1 h-px bg-yellow my-4" />
       <button className="flex items-center gap-2 px-4 py-2 border border-panel rounded-full">
-        <FaUser className="text-base text-brand shrink-0" />
-        <p className="text-sm text-brand font-bold">Sign In</p>
+        <FaUser className="text-base text-panel shrink-0" />
+        <p className="text-sm text-panel font-bold">Sign In</p>
       </button>
     </div>
   );

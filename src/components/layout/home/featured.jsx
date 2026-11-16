@@ -68,8 +68,8 @@ export default function Featured() {
                   className="object-cover"
                 />
                 <div className="absolute top-2 right-2 flex items-center gap-0.5 px-4 py-2 bg-(--color-accent)/90 rounded-full w-fit">
-                  <BiBook className="text-xs text-brand" />
-                  <p className="text-xs text-brand">{thesis.category}</p>
+                  <BiBook className="text-xs text-panel" />
+                  <p className="text-xs text-panel">{thesis.category}</p>
                 </div>
               </div>
 

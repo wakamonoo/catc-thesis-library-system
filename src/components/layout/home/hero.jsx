@@ -25,11 +25,11 @@ export default function Hero() {
             CAT College Thesis Library System
           </p>
         </div>
-        <h1 className="mt-4 text-4xl font-bold font-tall text-brand">
+        <h1 className="mt-4 text-4xl font-bold font-tall text-panel">
           Discover. Research.{" "}
           <span className="text-yellow font-alt italic">Learn More.</span>
         </h1>
-        <p className="mt-4 text-base text-brand leading-tight">
+        <p className="mt-4 text-base text-panel leading-tight">
           Your gateway to knowledge at CAT College Thesis Library. Find
           resources, access thesis, and explore more.
         </p>

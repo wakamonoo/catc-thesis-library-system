@@ -29,7 +29,7 @@ export default function Footer() {
             </div>
           </button>
           <div className="flex flex-col justify-center mt-2.5">
-            <h4 className="text-lg text-brand font-heading font-bold leading-2.5">
+            <h4 className="text-lg text-panel font-heading font-bold leading-2.5">
               CAT-C
             </h4>
             <p className="text-xs font-alt text-muted whitespace-nowrap">
@@ -39,7 +39,7 @@ export default function Footer() {
         </div>
         <div className="flex flex-col lg:flex-row items-start lg:items-center gap-4 lg:gap-8">
           <button onClick={handleHomeClick} className="cursor-pointer group">
-            <p className="font-alt text-sm font-bold transition-all duration-200 text-brand group-hover:text-(--color-yellow) group-active:text-(--color-yellow)">
+            <p className="font-alt text-sm font-bold transition-all duration-200 text-panel group-hover:text-(--color-yellow) group-active:text-(--color-yellow)">
               Home
             </p>
           </button>
@@ -47,7 +47,7 @@ export default function Footer() {
             onClick={handleFeaturedClick}
             className="cursor-pointer group"
           >
-            <p className="font-alt text-sm font-bold transition-all duration-200 text-brand group-hover:text-(--color-yellow) group-active:text-(--color-yellow)">
+            <p className="font-alt text-sm font-bold transition-all duration-200 text-panel group-hover:text-(--color-yellow) group-active:text-(--color-yellow)">
               Featured
             </p>
           </button>
@@ -55,25 +55,25 @@ export default function Footer() {
             onClick={handleCategoriesClick}
             className="cursor-pointer group"
           >
-            <p className="font-alt text-sm font-bold transition-all duration-200 text-brand group-hover:text-(--color-yellow) group-active:text-(--color-yellow)">
+            <p className="font-alt text-sm font-bold transition-all duration-200 text-panel group-hover:text-(--color-yellow) group-active:text-(--color-yellow)">
               Browse
             </p>
           </button>
           <button onClick={handleAboutClick} className="cursor-pointer group">
-            <p className="font-alt text-sm font-bold transition-all duration-200 text-brand group-hover:text-(--color-yellow) group-active:text-(--color-yellow)">
+            <p className="font-alt text-sm font-bold transition-all duration-200 text-panel group-hover:text-(--color-yellow) group-active:text-(--color-yellow)">
               About
             </p>
           </button>
         </div>
         <div className="flex gap-4">
           <button className="cursor-pointer w-10 h-10 p-2 rounded-full transition-all duration-200 hover:bg-(--color-yellow) active:bg-(--color-yellow)">
-            <FaFacebook className="text-2xl text-brand shrink-0" />
+            <FaFacebook className="text-2xl text-panel shrink-0" />
           </button>
           <button className="cursor-pointer w-10 h-10 p-2 rounded-full transition-all duration-200 hover:bg-(--color-yellow) active:bg-(--color-yellow)">
-            <FaInstagram className="text-2xl text-brand shrink-0" />
+            <FaInstagram className="text-2xl text-panel shrink-0" />
           </button>
           <button className="cursor-pointer w-10 h-10 p-2 rounded-full transition-all duration-200 hover:bg-(--color-yellow) active:bg-(--color-yellow)">
-            <BsTwitter className="text-2xl text-brand shrink-0" />
+            <BsTwitter className="text-2xl text-panel shrink-0" />
           </button>
         </div>
       </div>

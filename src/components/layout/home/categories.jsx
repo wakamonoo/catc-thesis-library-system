@@ -73,7 +73,7 @@ export default function Categories() {
               className="flex flex-col items-center gap-2 p-4 rounded-lg bg-accent shadow-xs"
             >
               <Icon className="text-4xl text-yellow shrink-0" />
-              <p className="text-sm text-brand text-center font-semibold line-clamp-2">
+              <p className="text-sm text-panel text-center font-semibold line-clamp-2">
                 {category.title}
               </p>
             </div>
