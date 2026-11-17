@@ -1,6 +1,5 @@
 import { NavigationProvider } from "@/context/navigationContext";
 import "./globals.css";
-import NavBar from "@/components/layout/essentials/navbar";
 import { AuthenticationProvider } from "@/context/authenticationContext";
 
 export const metadata = {
@@ -13,10 +12,7 @@ export default function RootLayout({ children }) {
     <html lang="en" className={`scroll-smooth`}>
       <body className="min-h-full flex flex-col">
         <AuthenticationProvider>
-          <NavigationProvider>
-            <NavBar />
-            {children}
-          </NavigationProvider>
+          <NavigationProvider>{children}</NavigationProvider>
         </AuthenticationProvider>
       </body>
     </html>
