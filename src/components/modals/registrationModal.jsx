@@ -4,6 +4,13 @@ import { MdClose, MdVisibility, MdVisibilityOff } from "react-icons/md";
 import Logo from "@/assets/catc-logo.jpg";
 import Image from "next/image";
 import PrimaryButton from "../buttons/primaryButton";
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+  signOut,
+  updateProfile,
+} from "firebase/auth";
+import { auth } from "@/lib/firebase/config";
 
 export default function RegistrationModal() {
   const [name, setName] = useState("");
@@ -11,9 +18,95 @@ export default function RegistrationModal() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const { setShowRegistrationModal, setShowSignInModal } = useContext(
     AuthenticationContext,
   );
+
+  const handleRegistration = async (e) => {
+    e.preventDefault();
+
+    setErrorMessage("");
+    setSuccessMessage("");
+
+    if (
+      !name.trim() ||
+      !studentId.trim() ||
+      !email.trim ||
+      !password ||
+      !confirmPassword
+    ) {
+      setErrorMessage("Please complete all fields");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setErrorMessage("Passwords do not match");
+      return;
+    }
+
+    if (password.length < 6) {
+      setErrorMessage("Password must be at least 6 characters");
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email.trim(),
+        password,
+      );
+
+      const user = userCredential.user;
+
+      await updateProfile(user, {
+        displayName: name.trim(),
+      });
+
+      await sendEmailVerification(user);
+
+      await signOut(auth);
+
+      setSuccessMessage(
+        "Account created succesfully! Please check your email to verify your account before signing in.",
+      );
+
+      setName("");
+      setStudentId("");
+      setEmail("");
+      setPassword("");
+      setConfirmPassword("");
+    } catch (err) {
+      console.error("Registration error:", err);
+
+      switch (err.code) {
+        case "auth/email-already-in-use":
+          setErrorMessage("This email address is already registered");
+          break;
+
+        case "auth/invalid-email":
+          setErrorMessage("Please enter a valid email address");
+          break;
+
+        case "auth/weak-password":
+          setErrorMessage("Your password is too weak");
+          break;
+
+        case "auth/too-many-requests":
+          setErrorMessage("Too many attempts. Please try again later.");
+          break;
+
+        default:
+          setErrorMessage("Something went wrong. Please try again.");
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div
@@ -52,7 +145,7 @@ export default function RegistrationModal() {
         </div>
 
         <form
-          onSubmit={(e) => e.preventDefault()}
+          onSubmit={handleRegistration}
           className="flex flex-col gap-2 items-center justify-center p-4"
         >
           <div className="flex flex-col gap-2 w-full">
@@ -66,6 +159,9 @@ export default function RegistrationModal() {
               id="registration-name"
               type="text"
               placeholder="Enter your full name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
               className="w-full rounded-lg bg-panel px-4 py-2 text-sm text-normal outline-none placeholder:text-muted"
             />
           </div>
@@ -80,6 +176,9 @@ export default function RegistrationModal() {
               id="registration-studentid"
               type="test"
               placeholder="Enter Student-ID"
+              value={studentId}
+              onChange={(e) => setStudentId(e.target.value)}
+              required
               className="w-full rounded-lg bg-panel px-4 py-2 text-sm text-normal outline-none placeholder:text-muted"
             />
           </div>
@@ -94,6 +193,9 @@ export default function RegistrationModal() {
               id="registration-email"
               type="email"
               placeholder="Enter your email address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
               className="w-full rounded-lg bg-panel px-4 py-2 text-sm text-normal outline-none placeholder:text-muted"
             />
           </div>
@@ -109,6 +211,10 @@ export default function RegistrationModal() {
                 id="registration-password"
                 type="password"
                 placeholder="Create Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                minLength={6}
                 className="w-full rounded-lg bg-panel px-4 py-2 text-sm text-normal outline-none placeholder:text-muted"
               />
             </div>
@@ -123,17 +229,48 @@ export default function RegistrationModal() {
                 id="registration-confirmpassword"
                 type="password"
                 placeholder="Confirm Password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
                 className="w-full rounded-lg bg-panel px-4 py-2 text-sm text-normal outline-none placeholder:text-muted"
               />
             </div>
           </div>
-          <div className="mt-2 w-full">
-            <PrimaryButton>
-              <p className="text-sm text-panel font-bold tracking-wide">
-                Create Account
+
+          {errorMessage && (
+            <p className="text-xs w-full text-red-500 text-center">
+              {errorMessage}
+            </p>
+          )}
+
+          {successMessage && (
+            <div className="mt-2 flex flex-col items-center gap-2 w-full">
+              <p className="text-xs w-full text-green-500 text-center">
+                {successMessage}
               </p>
-            </PrimaryButton>
-          </div>
+              <PrimaryButton
+                type="button"
+                onClick={() => {
+                  setShowRegistrationModal(false);
+                  setShowSignInModal(true);
+                }}
+              >
+                <p className="text-sm text-panel font-bold tracking-wide">
+                  Proceed to Sign In
+                </p>
+              </PrimaryButton>
+            </div>
+          )}
+
+          {!successMessage && (
+            <div className="mt-2 w-full">
+              <PrimaryButton type="submit" disabled={isSubmitting}>
+                <p className="text-sm text-panel font-bold tracking-wide">
+                  {isSubmitting ? "Creating Account..." : "Create Account"}
+                </p>
+              </PrimaryButton>
+            </div>
+          )}
           <div className="flex items-center gap-1">
             <p className="text-center text-xs text-muted">
               Already have an account?
