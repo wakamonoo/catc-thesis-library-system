@@ -1,11 +1,16 @@
 import { AuthenticationContext } from "@/context/authenticationContext";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { MdClose, MdVisibility, MdVisibilityOff } from "react-icons/md";
 import Logo from "@/assets/catc-logo.jpg";
 import Image from "next/image";
 import PrimaryButton from "../buttons/primaryButton";
 
 export default function RegistrationModal() {
+  const [name, setName] = useState("");
+  const [studentId, setStudentId] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const { setShowRegistrationModal, setShowSignInModal } = useContext(
     AuthenticationContext,
   );
@@ -59,14 +64,28 @@ export default function RegistrationModal() {
             </label>
             <input
               id="registration-name"
-              type="email"
+              type="text"
               placeholder="Enter your full name"
               className="w-full rounded-lg bg-panel px-4 py-2 text-sm text-normal outline-none placeholder:text-muted"
             />
           </div>
           <div className="flex flex-col gap-2 w-full">
             <label
-              htmlFor="registration-name"
+              htmlFor="registration-studentid"
+              className="text-sm font-medium text-panel"
+            >
+              Student Id
+            </label>
+            <input
+              id="registration-studentid"
+              type="test"
+              placeholder="Enter Student-ID"
+              className="w-full rounded-lg bg-panel px-4 py-2 text-sm text-normal outline-none placeholder:text-muted"
+            />
+          </div>
+          <div className="flex flex-col gap-2 w-full">
+            <label
+              htmlFor="registration-email"
               className="text-sm font-medium text-panel"
             >
               Email Address
@@ -81,28 +100,28 @@ export default function RegistrationModal() {
           <div className="w-full grid grid-cols-2 gap-2">
             <div className="flex flex-col gap-2 w-full">
               <label
-                htmlFor="registration-email"
+                htmlFor="registration-password"
                 className="text-sm font-medium text-panel"
               >
                 Create Password
               </label>
               <input
                 id="registration-password"
-                type="email"
+                type="password"
                 placeholder="Create Password"
                 className="w-full rounded-lg bg-panel px-4 py-2 text-sm text-normal outline-none placeholder:text-muted"
               />
             </div>
             <div className="flex flex-col gap-2 w-full">
               <label
-                htmlFor="registration-name"
+                htmlFor="registration-confirmpassword"
                 className="text-sm font-medium text-panel"
               >
                 Confirm Password
               </label>
               <input
-                id="registration-name"
-                type="email"
+                id="registration-confirmpassword"
+                type="password"
                 placeholder="Confirm Password"
                 className="w-full rounded-lg bg-panel px-4 py-2 text-sm text-normal outline-none placeholder:text-muted"
               />
