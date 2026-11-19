@@ -34,7 +34,7 @@ export default function RegistrationModal() {
     if (
       !name.trim() ||
       !studentId.trim() ||
-      !email.trim ||
+      !email.trim() ||
       !password ||
       !confirmPassword
     ) {
@@ -55,6 +55,23 @@ export default function RegistrationModal() {
     try {
       setIsSubmitting(true);
 
+      const verificationRes = await fetch("/api/students/verify", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          studentId: studentId.trim(),
+          email: email.trim(),
+        }),
+      });
+
+      const verificationData = await verificationRes.json();
+
+      if (!verificationRes.ok) {
+        throw new Error(verificationData.message);
+      }
+
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email.trim(),
@@ -66,6 +83,26 @@ export default function RegistrationModal() {
       await updateProfile(user, {
         displayName: name.trim(),
       });
+
+      const token = await user.getIdToken();
+
+      const res = await fetch("/api/users/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          token,
+          studentId: studentId.trim(),
+          name: name.trim(),
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Failed to register user");
+      }
 
       await sendEmailVerification(user);
 
@@ -82,6 +119,11 @@ export default function RegistrationModal() {
       setConfirmPassword("");
     } catch (err) {
       console.error("Registration error:", err);
+
+      if (err.message == "Student ID and email do not match our records.") {
+        setErrorMessage(err.message);
+        return;
+      }
 
       switch (err.code) {
         case "auth/email-already-in-use":
@@ -139,7 +181,7 @@ export default function RegistrationModal() {
           <p className="mt-2 text-base text-panel uppercase font-semibold tracking-widest">
             Create Account
           </p>
-          <span className="text-xs text-muted">
+          <span className="text-xs text-center text-muted">
             Register to access the library
           </span>
         </div>
@@ -174,7 +216,7 @@ export default function RegistrationModal() {
             </label>
             <input
               id="registration-studentid"
-              type="test"
+              type="text"
               placeholder="Enter Student-ID"
               value={studentId}
               onChange={(e) => setStudentId(e.target.value)}

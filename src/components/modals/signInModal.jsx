@@ -4,14 +4,104 @@ import Image from "next/image";
 import { useContext, useState } from "react";
 import PrimaryButton from "../buttons/primaryButton";
 import { AuthenticationContext } from "@/context/authenticationContext";
+import { signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { auth } from "@/lib/firebase/config";
+import Swal from "sweetalert2";
 
 export default function SignInModal() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const { setShowSignInModal, setShowRegistrationModal } = useContext(
     AuthenticationContext,
   );
+
+  const handleSignIn = async (e) => {
+    e.preventDefault();
+
+    setErrorMessage("");
+
+    if (!email.trim() || !password) {
+      setErrorMessage("Please enter your email and password");
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email.trim(),
+        password,
+      );
+
+      const user = userCredential.user;
+
+      if (!user.emailVerified) {
+        await signOut(auth);
+
+        setErrorMessage("Please verify your email address before signing in.");
+        return;
+      }
+
+      setShowSignInModal(false);
+
+      Swal.fire({
+        toast: true,
+        position: "bottom-start",
+        title: `Hello ${user.displayName}!`,
+        icon: "success",
+        timer: 2000,
+        showConfirmButton: false,
+        background: "var(--color-yellow)",
+        iconColor: "var(--color-accent)",
+        customClass: {
+          popup:
+            "!w-full !max-w-xs !inline-flex !items-center !justify-center !text-normal !rounded-lg !shadow-lg !px-4 !py-2",
+          title:
+            "!text-base !font-[family-name:var(--font-normal)] !font-semibold !text-(--color-normal) !leading-4.5",
+        },
+      });
+
+      setEmail("");
+      setPassword("");
+    } catch (err) {
+      console.error("Sign in error:", err);
+
+      switch (err.code) {
+        case "auth/invalid-credential":
+          setErrorMessage("Incorrect email or password.");
+          break;
+
+        case "auth/user-not-found":
+          setErrorMessage("No account found with this email address.");
+          break;
+
+        case "auth/wrong-password":
+          setErrorMessage("Incorrect email or password.");
+          break;
+
+        case "auth/invalid-email":
+          setErrorMessage("Please enter a valid email address.");
+          break;
+
+        case "auth/user-disabled":
+          setErrorMessage("This account has been disabled.");
+          break;
+
+        case "auth/too-many-requests":
+          setErrorMessage("Too many attempts. Please try again later.");
+          break;
+
+        default:
+          setErrorMessage("Something went wrong. Please try again.");
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div
@@ -44,13 +134,13 @@ export default function SignInModal() {
           <p className="mt-2 text-base text-panel uppercase font-semibold tracking-widest">
             Welcome Back
           </p>
-          <span className="text-xs text-muted">
+          <span className="text-xs text-center text-muted">
             Sign in to access the library
           </span>
         </div>
 
         <form
-          onSubmit={(e) => e.preventDefault()}
+          onSubmit={handleSignIn}
           className="flex flex-col gap-2 items-center justify-center p-4"
         >
           <div className="flex flex-col gap-2 w-full">
@@ -61,7 +151,7 @@ export default function SignInModal() {
               Email Address
             </label>
             <input
-              id="sigin-email"
+              id="signin-email"
               type="email"
               placeholder="Enter your email address"
               value={email}
@@ -71,7 +161,7 @@ export default function SignInModal() {
           </div>
           <div className="flex flex-col gap-2 w-full">
             <label
-              htmlFor="signin-email"
+              htmlFor="signin-password"
               className="text-sm font-medium text-panel"
             >
               Password
@@ -105,10 +195,15 @@ export default function SignInModal() {
               </p>
             </button>
           </div>
+          {errorMessage && (
+            <p className="w-full text-xs text-red-500 text-center">
+              {errorMessage}
+            </p>
+          )}
           <div className="mt-2 w-full">
-            <PrimaryButton>
+            <PrimaryButton type="submit" disabled={isSubmitting}>
               <p className="text-sm text-panel font-bold tracking-wide">
-                Sign In
+                {isSubmitting ? "Signing in..." : "Sign In"}
               </p>
             </PrimaryButton>
           </div>

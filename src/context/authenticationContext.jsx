@@ -4,11 +4,13 @@ import { createContext, useContext, useEffect, useState } from "react";
 import SignInModal from "@/components/modals/signInModal";
 import { onAuthStateChanged, signOut as firebaseSignOut } from "firebase/auth";
 import { auth } from "@/lib/firebase/config";
+import SignOutModal from "@/components/modals/signOutModal";
 
 export const AuthenticationContext = createContext();
 
 export const AuthenticationProvider = ({ children }) => {
-  const [showLogInModal, setShowSignInModal] = useState(false);
+  const [showSignInModal, setShowSignInModal] = useState(false);
+  const [showSignOutModal, setShowSignOutModal] = useState(false);
   const [showRegistrationModal, setShowRegistrationModal] = useState(false);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -22,6 +24,10 @@ export const AuthenticationProvider = ({ children }) => {
     return () => unsubscribe();
   });
 
+  const isSignedIn = !!user;
+
+  const isEmailVerified = user?.emailVerified ?? false;
+
   const signOutUser = async () => {
     await firebaseSignOut(auth);
   };
@@ -31,13 +37,17 @@ export const AuthenticationProvider = ({ children }) => {
       value={{
         user,
         loading,
+        isSignedIn,
+        isEmailVerified,
         signOutUser,
         setShowSignInModal,
+        setShowSignOutModal,
         setShowRegistrationModal,
       }}
     >
       {children}
-      {showLogInModal && <SignInModal />}
+      {showSignInModal && <SignInModal />}
+      {showSignOutModal && <SignOutModal />}
       {showRegistrationModal && <RegistrationModal />}
     </AuthenticationContext.Provider>
   );

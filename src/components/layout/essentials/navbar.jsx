@@ -9,12 +9,14 @@ import Image from "next/image";
 import { useContext, useEffect, useRef, useState } from "react";
 import { BiMenu } from "react-icons/bi";
 import { FaBars, FaUser } from "react-icons/fa";
-import { FaXmark } from "react-icons/fa6";
+import { FaRightFromBracket, FaXmark } from "react-icons/fa6";
 
 export default function NavBar() {
   const [scrolled, setScrolled] = useState(false);
   const [showMenuOptions, setShowMenuOptions] = useState(false);
-  const { setShowSignInModal } = useContext(AuthenticationContext);
+  const { isSignedIn, setShowSignInModal, setShowSignOutModal } = useContext(
+    AuthenticationContext,
+  );
   const {
     active,
     handleHomeClick,
@@ -98,15 +100,27 @@ export default function NavBar() {
           </button>
         </div>
         <div className="hidden lg:block">
-          <PrimaryButton
-            onClick={() => setShowSignInModal(true)}
-            className="cursor-pointer flex items-center gap-2 px-4 py-2 border border-panel rounded-full transition-all duration-200 group hover:bg-(--color-panel) hover:border-(--color-yellow) active:bg-(--color-panel) active:border-(--color-yellow)"
-          >
-            <FaUser className="text-base text-panel shrink-0" />
-            <p className="text-sm text-panel font-bold tracking-wide">
-              Sign In
-            </p>
-          </PrimaryButton>
+          {isSignedIn ? (
+            <PrimaryButton
+              onClick={() => setShowSignOutModal(true)}
+              className="cursor-pointer flex items-center gap-2 px-4 py-2 border border-panel rounded-full transition-all duration-200 group hover:bg-(--color-panel) hover:border-(--color-yellow) active:bg-(--color-panel) active:border-(--color-yellow)"
+            >
+              <FaRightFromBracket className="text-base text-panel shrink-0" />
+              <p className="text-sm text-panel font-bold tracking-wide">
+                Sign Out
+              </p>
+            </PrimaryButton>
+          ) : (
+            <PrimaryButton
+              onClick={() => setShowSignInModal(true)}
+              className="cursor-pointer flex items-center gap-2 px-4 py-2 border border-panel rounded-full transition-all duration-200 group hover:bg-(--color-panel) hover:border-(--color-yellow) active:bg-(--color-panel) active:border-(--color-yellow)"
+            >
+              <FaUser className="text-base text-panel shrink-0" />
+              <p className="text-sm text-panel font-bold tracking-wide">
+                Sign In
+              </p>
+            </PrimaryButton>
+          )}
         </div>
         <div className="block lg:hidden">
           <button
