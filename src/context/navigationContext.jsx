@@ -8,6 +8,7 @@ export const NavigationProvider = ({ children }) => {
   const [active, setActive] = useState("hero");
   const router = useRouter();
   const pathname = usePathname();
+  const [activeAdminPage, setActiveAdminPage] = useState("dashboard");
 
   const handleHomeClick = async () => {
     if (pathname === "/") {
@@ -48,6 +49,10 @@ export const NavigationProvider = ({ children }) => {
     setActive("about");
   };
 
+  const handleAdminNavigation = (page) => {
+    setActiveAdminPage(page);
+  };
+
   return (
     <NavigationContext.Provider
       value={{
@@ -56,6 +61,8 @@ export const NavigationProvider = ({ children }) => {
         handleFeaturedClick,
         handleCategoriesClick,
         handleAboutClick,
+        activeAdminPage,
+        handleAdminNavigation,
       }}
     >
       {children}
