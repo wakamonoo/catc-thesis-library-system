@@ -56,7 +56,7 @@ export default function SignInModal() {
         timer: 2000,
         showConfirmButton: false,
         background: "var(--color-yellow)",
-        iconColor: "var(--color-accent)",
+        iconColor: "var(--color-success)",
         customClass: {
           popup:
             "!w-full !max-w-xs !inline-flex !items-center !justify-center !text-normal !rounded-lg !shadow-lg !px-4 !py-2",

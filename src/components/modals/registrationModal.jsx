@@ -38,17 +38,17 @@ export default function RegistrationModal() {
       !password ||
       !confirmPassword
     ) {
-      setErrorMessage("Please complete all fields");
+      setErrorMessage("Please complete all fields.");
       return;
     }
 
     if (password !== confirmPassword) {
-      setErrorMessage("Passwords do not match");
+      setErrorMessage("Passwords do not match.");
       return;
     }
 
     if (password.length < 6) {
-      setErrorMessage("Password must be at least 6 characters");
+      setErrorMessage("Password must be at least 6 characters.");
       return;
     }
 
@@ -127,15 +127,15 @@ export default function RegistrationModal() {
 
       switch (err.code) {
         case "auth/email-already-in-use":
-          setErrorMessage("This email address is already registered");
+          setErrorMessage("This email address is already registered.");
           break;
 
         case "auth/invalid-email":
-          setErrorMessage("Please enter a valid email address");
+          setErrorMessage("Please enter a valid email address.");
           break;
 
         case "auth/weak-password":
-          setErrorMessage("Your password is too weak");
+          setErrorMessage("Your password is too weak.");
           break;
 
         case "auth/too-many-requests":
@@ -280,14 +280,14 @@ export default function RegistrationModal() {
           </div>
 
           {errorMessage && (
-            <p className="text-xs w-full text-red-500 text-center">
+            <p className="mt-2 text-xs w-full text-error text-center">
               {errorMessage}
             </p>
           )}
 
           {successMessage && (
             <div className="mt-2 flex flex-col items-center gap-2 w-full">
-              <p className="text-xs w-full text-green-500 text-center">
+              <p className="text-xs w-full text-success text-center">
                 {successMessage}
               </p>
               <PrimaryButton

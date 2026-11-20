@@ -17,6 +17,8 @@
     --color-yellow: #ffc21a; /* yellow accent */
     --color-navy: #123456; /* navy accent */
     --color-accent-dark: #102b50; /* darker blue / hover */
+    --color-error: #dc4545; /* error / destructive actions */
+    --color-success: #239b65; /* success / confirmation */
 
     --font-heading: "Playfair Display", serif;
     --font-body: "Inter", sans-serif;
@@ -108,6 +110,14 @@
 
   .text-navy {
     color: var(--color-navy);
+  }
+
+  .text-error {
+    color: var(--color-error);
+  }
+
+  .text-success {
+    color: var(--color-success);
   }
 
   .font-heading {
