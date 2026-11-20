@@ -12,10 +12,10 @@
     "dotenv": "^18.0.10",
     "firebase": "^13.4.0",
     "firebase-admin": "^14.5.1",
-    "lucide-react": "^1.74.0",
     "mongodb": "^7.9.0",
     "next": "16.4.6",
     "react": "19.3.0",
+    "react-countup": "^6.5.3",
     "react-dom": "19.3.0",
     "react-icons": "^5.7.0",
     "sweetalert2": "^11.26.25"

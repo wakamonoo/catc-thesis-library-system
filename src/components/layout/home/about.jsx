@@ -4,6 +4,7 @@ import { GiBookshelf } from "react-icons/gi";
 import { GoVerified } from "react-icons/go";
 import sample from "@/assets/hero-img.webp";
 import Image from "next/image";
+import SecondaryButton from "@/components/buttons/secondaryButton";
 
 const features = [
   {
@@ -104,12 +105,12 @@ export default function About() {
             programs of CAT-C.
           </p>
           <div className="mt-4">
-            <button className="flex items-center gap-2 px-4 py-2 bg-accent rounded-full">
+            <SecondaryButton>
               <p className="text-sm text-panel font-bold">
                 Explore the Collection
               </p>
               <BiChevronRight className="text-base text-panel shrink-0" />
-            </button>
+            </SecondaryButton>
           </div>
         </div>
       </div>

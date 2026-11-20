@@ -1,5 +1,4 @@
 import { NavigationContext } from "@/context/navigationContext";
-import { useRouter } from "next/router";
 import { useContext, useEffect, useRef } from "react";
 import { FaUser } from "react-icons/fa";
 
@@ -52,7 +51,7 @@ export default function MenuOptions({
   return (
     <div
       ref={divRef}
-      className="fixed top-18 right-8 md:right-16 h-fit w-[50vw] md:w-[30vw] bg-accent rounded-2xl p-8 shadow-2xl overflow-hidden z-100"
+      className="absolute top-12 -right-4 h-fit w-60 bg-accent border border-navy rounded-2xl p-8 shadow-2xl overflow-hidden z-100"
     >
       <div className="flex flex-col gap-4 items-start">
         <button onClick={handleHomeClick} className="cursor-pointer group">

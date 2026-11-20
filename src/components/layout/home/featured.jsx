@@ -48,9 +48,11 @@ export default function Featured() {
             College.
           </p>
         </div>
-        <button className="cursor-pointer flex items-center gap-2">
-          <p className="text-sm text-muted whitespace-nowrap">Browse All</p>
-          <BsArrowRight className="text-sm text-muted" />
+        <button className="cursor-pointer flex items-center gap-2 group">
+          <p className="text-sm text-muted group-hover:text-(--color-accent) group-active:text-(--color-accent) whitespace-nowrap">
+            Browse All
+          </p>
+          <BsArrowRight className="text-sm text-muted transition-all duration-200 ggroup-hover:text-(--color-accent) group-active:text-(--color-accent)" />
         </button>
       </div>
       <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
@@ -58,7 +60,7 @@ export default function Featured() {
           return (
             <div
               key={thesis.id}
-              className="flex flex-col bg-panel shadow-xs rounded-lg overflow-hidden"
+              className="cursor-pointer flex flex-col bg-panel shadow-xs rounded-lg overflow-hidden transtition-all duration-200 group hover:-translate-y-1 active:-translate-y-1 hover:shadow-2xl active:shadow-2xl"
             >
               <div className="relative w-full h-44">
                 <Image

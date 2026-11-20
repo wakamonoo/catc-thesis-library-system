@@ -1,55 +1,10 @@
-import {
-  BiLaptop,
-  BiBulb,
-  BiChip,
-  BiShield,
-  BiLock,
-  BiCode,
-  BiBook,
-  BiCalculator,
-  BiBriefcase,
-  BiCar,
-  BiWrench,
-  BiDesktop,
-  BiBuilding,
-  BiChevronRight,
-} from "react-icons/bi";
-import { BsArrowRight } from "react-icons/bs";
-import { FaBook } from "react-icons/fa6";
-
-const sampleData = [
-  { id: 1, icon: BiLaptop, title: "Computer Engineering" },
-  { id: 2, icon: BiBulb, title: "Electrical Engineering" },
-  { id: 3, icon: BiChip, title: "Electronics Engineering" },
-  { id: 4, icon: BiShield, title: "Criminology" },
-  { id: 5, icon: BiLock, title: "Industrial Security Management" },
-  { id: 6, icon: BiCode, title: "Information Technology" },
-  { id: 7, icon: BiDesktop, title: "Computer Science" },
-  { id: 8, icon: FaBook, title: "Office Administration" },
-  {
-    id: 9,
-    icon: BiCalculator,
-    title: "Business Administration Major in Financial Management",
-  },
-  {
-    id: 10,
-    icon: BiBriefcase,
-    title: "Business Administration Major in Marketing Management",
-  },
-  {
-    id: 11,
-    icon: BiCar,
-    title: "Engineering Technology Major in Automotive Technology",
-  },
-  {
-    id: 12,
-    icon: BiWrench,
-    title: "Engineering Technology Major in Electronics Technology",
-  },
-  { id: 13, icon: BiBuilding, title: "Associate in Computer Technology" },
-];
+"use client";
+import { ProgramContext } from "@/context/programContext";
+import { useContext } from "react";
 
 export default function Categories() {
+  const { programs } = useContext(ProgramContext);
+
   return (
     <div id="categories" className="p-8 md:p-16 lg:px-32 xl:px-64">
       <div className="flex flex-col">
@@ -64,15 +19,15 @@ export default function Categories() {
         </p>
       </div>
       <div className="mt-8 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-        {sampleData.map((category) => {
+        {programs.map((category) => {
           const Icon = category.icon;
 
           return (
             <div
               key={category.id}
-              className="flex flex-col items-center gap-2 p-4 rounded-lg bg-accent shadow-xs"
+              className="cursor-pointer flex flex-col items-center gap-2 p-4 rounded-lg bg-accent shadow-xs group transition-all duration-200 hover:bg-(--color-yellow) active:bg-(--color-yellow) hover:shadow-2xl active:shadow-2xl"
             >
-              <Icon className="text-4xl text-yellow shrink-0" />
+              <Icon className="text-4xl text-yellow transition-all duration-200 group-hover:text-(--color-accent) group-active:text-(--color-accent) shrink-0" />
               <p className="text-sm text-panel text-center font-semibold line-clamp-2">
                 {category.title}
               </p>

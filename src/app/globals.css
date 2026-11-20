@@ -133,6 +133,10 @@
   .border-panel {
     border-color: var(--color-panel);
   }
+
+  .border-border {
+    border-color: var(--color-border);
+  }
 }
 
 /* ———————————————————————————————————— scrollbars ——— */

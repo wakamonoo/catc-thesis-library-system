@@ -122,7 +122,7 @@ export default function NavBar() {
             </PrimaryButton>
           )}
         </div>
-        <div className="block lg:hidden">
+        <div className="relative block lg:hidden">
           <button
             ref={menuOptionsButtonRef}
             onClick={() => setShowMenuOptions((prev) => !prev)}
@@ -134,14 +134,14 @@ export default function NavBar() {
               <FaBars className="text-2xl text-panel transition-all duration-200 group-hover:text-(--color-yellow) group-active:text-(--color-yellow)" />
             )}
           </button>
+          {showMenuOptions && (
+            <MenuOptions
+              setShowMenuOptions={setShowMenuOptions}
+              menuOptionsButtonRef={menuOptionsButtonRef}
+            />
+          )}
         </div>
       </div>
-      {showMenuOptions && (
-        <MenuOptions
-          setShowMenuOptions={setShowMenuOptions}
-          menuOptionsButtonRef={menuOptionsButtonRef}
-        />
-      )}
     </>
   );
 }
