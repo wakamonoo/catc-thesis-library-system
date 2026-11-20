@@ -3,8 +3,6 @@ import clientPromise from "@/lib/mongodb/config.js";
 import { v4 as uuidv4 } from "uuid";
 
 export async function POST(request) {
-  let publicId;
-
   try {
     const { title, authors, program, keywords, document } =
       await request.json();
@@ -16,7 +14,9 @@ export async function POST(request) {
       !program ||
       !Array.isArray(keywords) ||
       !keywords.length ||
-      !document?.publicId
+      !document.publicId ||
+      !Array.isArray(document.pages) ||
+      !document?.totalPages
     ) {
       return Response.json(
         {
@@ -28,8 +28,6 @@ export async function POST(request) {
         },
       );
     }
-
-    publicId = document.publicId;
 
     const client = await clientPromise;
     const mongodb = process.env.MONGODB;
@@ -45,7 +43,10 @@ export async function POST(request) {
         publicId: document.publicId,
         format: "pdf",
         bytes: document.bytes,
-        originalFilename: document.originalFilename,
+        originalFileName: document.originalFileName,
+        totalPages: document.totalPages,
+        previewPages: document.previewPages,
+        pages: document.pages,
       },
       createdAt: new Date(),
     };
@@ -71,17 +72,6 @@ export async function POST(request) {
     });
   } catch (err) {
     console.error("Failed to add thesis.", err);
-
-    if (publicId) {
-      try {
-        await cloudinary.uploader.destroy(publicId, {
-          resource_type: "raw",
-          type: "authenticated",
-        });
-      } catch (err) {
-        console.error("Failed to delete uploaded PDF:", cleanupError);
-      }
-    }
 
     return Response.json(
       {

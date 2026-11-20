@@ -6,12 +6,14 @@ import MenuOptions from "@/components/options/menuOptions";
 import { AuthenticationContext } from "@/context/authenticationContext";
 import { NavigationContext } from "@/context/navigationContext";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { useContext, useEffect, useRef, useState } from "react";
 import { BiMenu } from "react-icons/bi";
 import { FaBars, FaUser } from "react-icons/fa";
 import { FaRightFromBracket, FaXmark } from "react-icons/fa6";
 
 export default function NavBar() {
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [showMenuOptions, setShowMenuOptions] = useState(false);
   const { isSignedIn, setShowSignInModal, setShowSignOutModal } = useContext(
@@ -25,6 +27,8 @@ export default function NavBar() {
     handleAboutClick,
   } = useContext(NavigationContext);
   const menuOptionsButtonRef = useRef(null);
+
+  const isMainPage = pathname === "/";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -42,7 +46,7 @@ export default function NavBar() {
   return (
     <>
       <div
-        className={`fixed z-100 w-full flex justify-between items-center p-8 md:px-16 lg:px-32 xl:px-64 h-14 transition-all duration-200 ${scrolled ? "bg-accent" : "bg-transparent"}`}
+        className={`fixed z-100 w-full flex justify-between items-center p-8 md:px-16 lg:px-32 xl:px-64 h-14 transition-all duration-200 ${scrolled || !isMainPage ? "bg-accent" : "bg-transparent"}`}
       >
         <div className="flex items-center gap-2">
           <button onClick={handleHomeClick} className="cursor-pointer">
@@ -103,7 +107,6 @@ export default function NavBar() {
           {isSignedIn ? (
             <PrimaryButton
               onClick={() => setShowSignOutModal(true)}
-              className="cursor-pointer flex items-center gap-2 px-4 py-2 border border-panel rounded-full transition-all duration-200 group hover:bg-(--color-panel) hover:border-(--color-yellow) active:bg-(--color-panel) active:border-(--color-yellow)"
             >
               <FaRightFromBracket className="text-base text-panel shrink-0" />
               <p className="text-sm text-panel font-bold tracking-wide">
@@ -113,7 +116,6 @@ export default function NavBar() {
           ) : (
             <PrimaryButton
               onClick={() => setShowSignInModal(true)}
-              className="cursor-pointer flex items-center gap-2 px-4 py-2 border border-panel rounded-full transition-all duration-200 group hover:bg-(--color-panel) hover:border-(--color-yellow) active:bg-(--color-panel) active:border-(--color-yellow)"
             >
               <FaUser className="text-base text-panel shrink-0" />
               <p className="text-sm text-panel font-bold tracking-wide">
