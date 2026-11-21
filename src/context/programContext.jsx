@@ -18,6 +18,7 @@ import {
 } from "react-icons/bi";
 
 import { FaBook } from "react-icons/fa6";
+import { MdSchool } from "react-icons/md";
 
 export const ProgramContext = createContext();
 
@@ -52,6 +53,7 @@ export const ProgramProvider = ({ children }) => {
       title: "Engineering Technology Major in Electronics Technology",
     },
     { id: 13, icon: BiBuilding, title: "Associate in Computer Technology" },
+    { id: 14, icon: MdSchool, title: "General Academic Strand" },
   ];
 
   return (

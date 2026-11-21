@@ -1,6 +1,7 @@
 "use client";
 import PrimaryButton from "@/components/buttons/primaryButton";
 import SecondaryButton from "@/components/buttons/secondaryButton";
+import { FileLoader } from "@/components/loaders/fileLoader";
 import { useEffect, useRef, useState } from "react";
 import {
   MdChevronLeft,
@@ -33,7 +34,7 @@ export default function ThesisReader({ thesisId }) {
         setPages([]);
 
         const response = await fetch(
-          `/api/theses/${encodeURIComponent(thesisId)}/pages`,
+          `/api/theses/getTheses/${encodeURIComponent(thesisId)}/pages`,
           {
             cache: "no-store",
             signal: controller.signal,
@@ -131,15 +132,15 @@ export default function ThesisReader({ thesisId }) {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center py-24 gap-4">
-        <p>loading...</p>
+      <div className="flex flex-col items-center justify-center py-24">
+        <FileLoader />
       </div>
     );
   }
 
   if (errorMessage)
     return (
-      <div className="flex flex-col items-center justify-center py-24 gap-2">
+      <div className="flex flex-col items-center justify-center py-24">
         <MdErrorOutline className="text-4xl text-error shrink-0" />
         <p className="text-sm text-normal">{errorMessage}</p>
       </div>

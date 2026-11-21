@@ -1,5 +1,6 @@
 "use client";
 import ThesisReader from "@/components/layout/thesis/thesisReader";
+import { PageLoader } from "@/components/loaders/pageLoader";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import {
@@ -12,11 +13,13 @@ import {
 export default function Page() {
   const { thesisId } = useParams();
   const [thesis, setThesis] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchThesis() {
       try {
-        const response = await fetch(`/api/theses/${thesisId}`);
+        setLoading(true);
+        const response = await fetch(`/api/theses/getTheses/${thesisId}`);
 
         if (!response.ok) {
           throw new Error(
@@ -30,11 +33,17 @@ export default function Page() {
         setThesis(data.thesis);
       } catch (err) {
         console.log("Failed to fetch thesis:", err);
+      } finally {
+        setLoading(false);
       }
     }
 
     fetchThesis();
   }, [thesisId]);
+
+  if (loading) {
+    return <PageLoader />;
+  }
 
   return (
     <div className="p-8 md:p-16 lg:px-32 xl:px-64">

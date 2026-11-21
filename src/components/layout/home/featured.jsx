@@ -1,38 +1,14 @@
-import sample from "@/assets/hero-img.webp";
+"use client";
+import { ThesisContext } from "@/context/thesisContext";
 import Image from "next/image";
+import Link from "next/link";
+import { useContext } from "react";
 import { BiBook, BiCalendar } from "react-icons/bi";
 import { BsArrowRight, BsPerson } from "react-icons/bs";
-import { FaPerson } from "react-icons/fa6";
-
-const sampleData = [
-  {
-    id: 1,
-    title: "Development of a Web-Based Library Management System",
-    author: "Joven Bataller",
-    category: "Information Technology",
-    date: "Aug. 2025",
-    image: sample,
-  },
-  {
-    id: 2,
-    title:
-      "An Online Platform for Preserving Local Folklore and Cultural Heritage",
-    author: "Maria Santos",
-    category: "Information Technology",
-    date: "Mar. 2025",
-    image: sample,
-  },
-  {
-    id: 3,
-    title: "A Study on Sustainable Agricultural Practices in Albay",
-    author: "Juan Dela Cruz",
-    category: "Agriculture",
-    date: "Jan. 2025",
-    image: sample,
-  },
-];
 
 export default function Featured() {
+  const { theses } = useContext(ThesisContext);
+
   return (
     <div id="featured" className="p-8 md:p-16 lg:px-32 xl:px-64">
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 justify-between">
@@ -56,22 +32,25 @@ export default function Featured() {
         </button>
       </div>
       <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
-        {sampleData.map((thesis) => {
+        {theses.map((thesis) => {
           return (
-            <div
-              key={thesis.id}
+            <Link
+              key={thesis.thesisId}
+              href={`/thesis/${thesis.thesisId}`}
               className="cursor-pointer flex flex-col bg-panel shadow-xs rounded-lg overflow-hidden transtition-all duration-200 group hover:-translate-y-1 active:-translate-y-1 hover:shadow-2xl active:shadow-2xl"
             >
               <div className="relative w-full h-44">
                 <Image
-                  src={thesis.image}
+                  src={thesis.coverImage}
                   alt={thesis.title}
                   fill
                   className="object-cover"
                 />
-                <div className="absolute top-2 right-2 flex items-center gap-0.5 px-4 py-2 bg-(--color-accent)/90 rounded-full w-fit">
+                <div
+                  className={`absolute top-2 right-2 flex items-center gap-0.5 px-4 py-2 rounded-full w-fit ${thesis.educationLevel === "College" ? "bg-(--color-accent)/90" : "bg-(--color-yellow)/90"}`}
+                >
                   <BiBook className="text-xs text-panel" />
-                  <p className="text-xs text-panel">{thesis.category}</p>
+                  <p className="text-xs text-panel">{thesis.program}</p>
                 </div>
               </div>
 
@@ -79,19 +58,19 @@ export default function Featured() {
                 <p className="mt-2 font-alt tracking-wide text-base font-semibold leading-tight">
                   {thesis.title}
                 </p>
-                <div className="mt-4 flex gap-4">
-                  <div className="flex items-center gap-2">
-                    <BsPerson className="text-sm text-muted shrink-0" />
-                    <p className="text-sm text-muted">{thesis.author}</p>
-                  </div>
-                  <div className="w-px h-4 bg-muted" />
-                  <div className="flex items-center gap-2">
-                    <BiCalendar className="text-sm text-muted shrink-0" />
-                    <p className="text-sm text-muted">{thesis.date}</p>
+                <div className="mt-4 flex flex-wrap gap-4">
+                  <div className="flex items-start gap-2">
+                    <div className="w-6 h-6 rounded-full bg-second shrink-0 flex items-center justify-center">
+                      <BsPerson className="text-xs text-muted shrink-0" />
+                    </div>
+                    <p className="text-xs text-muted">
+                      {thesis?.authors?.join(", ") ||
+                        "Authors information unavailable"}
+                    </p>
                   </div>
                 </div>
               </div>
-            </div>
+            </Link>
           );
         })}
       </div>

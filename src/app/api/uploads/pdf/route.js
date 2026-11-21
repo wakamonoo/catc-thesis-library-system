@@ -130,7 +130,7 @@ export async function POST(request) {
         publicId,
         format: "pdf",
         bytes: uploaded.bytes,
-        originalFilename: file.name,
+        originalFileName: file.name,
         totalPages,
         previewPages: PREVIEW_PAGES,
         pages,

@@ -4,16 +4,25 @@ import { v4 as uuidv4 } from "uuid";
 
 export async function POST(request) {
   try {
-    const { title, authors, program, keywords, document } =
-      await request.json();
+    const {
+      title,
+      authors,
+      program,
+      educationLevel,
+      keywords,
+      coverImage,
+      document,
+    } = await request.json();
 
     if (
       !title.trim() ||
       !Array.isArray(authors) ||
       !authors.length ||
       !program ||
+      !educationLevel ||
       !Array.isArray(keywords) ||
       !keywords.length ||
+      !coverImage ||
       !document.publicId ||
       !Array.isArray(document.pages) ||
       !document?.totalPages
@@ -38,7 +47,9 @@ export async function POST(request) {
       title: title.trim(),
       authors: authors.map((author) => author.trim()).filter(Boolean),
       program: program.trim(),
+      educationLevel: educationLevel.trim(),
       keywords: keywords.map((keyword) => keyword.trim()).filter(Boolean),
+      coverImage,
       document: {
         publicId: document.publicId,
         format: "pdf",
