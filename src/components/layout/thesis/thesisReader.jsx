@@ -214,7 +214,7 @@ export default function ThesisReader({ thesisId }) {
                       alt={`Page ${page.pageNumber}`}
                       loading={page.pageNumber <= 2 ? "eager" : "lazy"}
                       draggable="false"
-                      className="block w-full h-auto aspect-3/4 object-contain select-none"
+                      className="block w-full h-auto aspect-3/4 object-contain pointer-events-auto select-none"
                     />
                     {page.blurred && (
                       <div className="absolute inset-0 flex items-center justify-center bg-black/10">

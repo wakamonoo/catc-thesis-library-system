@@ -21,6 +21,7 @@ export default function AddThesisModal({ setShowAddThesisModal }) {
   const [authors, setAuthors] = useState("");
   const [program, setProgram] = useState("");
   const [educationLevel, setEducationLevel] = useState("");
+  const [academicYear, setAcademicYear] = useState("");
   const [keywords, setKeywords] = useState("");
   const [coverImage, setCoverImage] = useState(null);
   const [file, setFile] = useState(null);
@@ -31,6 +32,7 @@ export default function AddThesisModal({ setShowAddThesisModal }) {
       !authors.trim() ||
       !program ||
       !educationLevel ||
+      !academicYear.trim() ||
       !keywords.trim() ||
       !coverImage ||
       !file
@@ -103,6 +105,7 @@ export default function AddThesisModal({ setShowAddThesisModal }) {
             .filter(Boolean),
           program,
           educationLevel,
+          academicYear,
           keywords: keywords
             .split(",")
             .map((keyword) => keyword.trim())
@@ -243,7 +246,7 @@ export default function AddThesisModal({ setShowAddThesisModal }) {
               value={program}
               onChange={(e) => setProgram(e.target.value)}
               required
-              className="w-full px-4 py-2 bg-panel rounded-lg outline-none"
+              className="w-full cursor-pointer px-4 py-2 border border-border bg-panel rounded-lg outline-none"
             >
               <option value="" disabled>
                 Select a program
@@ -290,6 +293,24 @@ export default function AddThesisModal({ setShowAddThesisModal }) {
                 College
               </option>
             </select>
+          </div>
+
+          <div className="flex flex-col gap-2 w-full">
+            <label
+              htmlFor="thesis-academic-year"
+              className="text-sm font-medium text-panel"
+            >
+              Academic Year
+            </label>
+            <input
+              id="thesis-academic-year"
+              type="text"
+              value={academicYear}
+              onChange={(e) => setAcademicYear(e.target.value)}
+              placeholder="eg. 2025-2026"
+              required
+              className="w-full rounded-lg bg-panel px-4 py-2 text-sm text-normal outline-none placeholder:text-muted"
+            />
           </div>
 
           <div className="flex flex-col gap-2 w-full">

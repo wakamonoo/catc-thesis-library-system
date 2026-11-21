@@ -16,7 +16,7 @@ export default function Footer() {
   } = useContext(NavigationContext);
 
   return (
-    <div className="bg-accent mt-24 p-8 md:px-16 lg:px-32 xl:px-64">
+    <div className="bg-accent mt-24 p-4 sm:p-8 md:p-16 lg:px-32 xl:px-64">
       <div className="flex flex-col gap-12 sm:flex-row md:justify-between">
         <div className="flex items-center gap-2">
           <button onClick={handleHomeClick} className="cursor-pointer">

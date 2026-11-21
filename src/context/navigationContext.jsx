@@ -1,11 +1,13 @@
 "use client";
 import { createContext, useContext, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import { LoaderContext } from "./loaderContext";
 
 export const NavigationContext = createContext();
 
 export const NavigationProvider = ({ children }) => {
   const [active, setActive] = useState("hero");
+  const { setIsLoading } = useContext(LoaderContext);
   const router = useRouter();
   const pathname = usePathname();
   const [activeAdminPage, setActiveAdminPage] = useState("dashboard");
@@ -26,25 +28,40 @@ export const NavigationProvider = ({ children }) => {
   };
 
   const handleFeaturedClick = () => {
-    document
-      .getElementById("featured")
-      ?.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (pathname === "/") {
+      document
+        .getElementById("featured")
+        ?.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      setIsLoading(true);
+      router.push("/#featured");
+    }
 
     setActive("featured");
   };
 
   const handleCategoriesClick = () => {
-    document
-      .getElementById("categories")
-      ?.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (pathname === "/") {
+      document
+        .getElementById("categories")
+        ?.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      setIsLoading(true);
+      router.push("/#categories");
+    }
 
     setActive("categories");
   };
 
   const handleAboutClick = () => {
-    document
-      .getElementById("about")
-      ?.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (pathname === "/") {
+      document
+        .getElementById("about")
+        ?.scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      setIsLoading(true);
+      router.push("/#about");
+    }
 
     setActive("about");
   };

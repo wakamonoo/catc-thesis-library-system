@@ -46,7 +46,7 @@ export default function Page() {
   }
 
   return (
-    <div className="p-8 md:p-16 lg:px-32 xl:px-64">
+    <div className="p-4 sm:p-8 md:p-16 lg:px-32 xl:px-64">
       <div className="mt-16 md:mt-8 p-4 bg-panel rounded-2xl border border-border shadow-xs">
         <div className="flex flex-wrap items-center gap-2">
           <div className="flex items-center gap-2 bg-yellow px-4 py-2 rounded-full">

@@ -5,6 +5,7 @@ export const ThesisContext = createContext();
 
 export const ThesisProvider = ({ children }) => {
   const [theses, setTheses] = useState([]);
+  const [thesesLoad, setThesesLoad] = useState(true);
 
   const fetchTheses = async () => {
     try {
@@ -22,6 +23,8 @@ export const ThesisProvider = ({ children }) => {
     } catch (err) {
       console.error("failed to fetch products", err);
       setTheses([]);
+    } finally {
+      setThesesLoad(false);
     }
   };
 
@@ -30,7 +33,7 @@ export const ThesisProvider = ({ children }) => {
   }, []);
 
   return (
-    <ThesisContext.Provider value={{ theses }}>
+    <ThesisContext.Provider value={{ theses, thesesLoad }}>
       {children}
     </ThesisContext.Provider>
   );
