@@ -10,6 +10,7 @@ export async function POST(request) {
       program,
       educationLevel,
       academicYear,
+      previewPages,
       keywords,
       coverImage,
       document,
@@ -22,6 +23,7 @@ export async function POST(request) {
       !program ||
       !educationLevel ||
       !academicYear.trim() ||
+      !previewPages.trim() ||
       !Array.isArray(keywords) ||
       !keywords.length ||
       !coverImage ||
@@ -51,6 +53,7 @@ export async function POST(request) {
       program: program.trim(),
       educationLevel: educationLevel.trim(),
       academicYear: academicYear.trim(),
+      previewPages: previewPages.trim(),
       keywords: keywords.map((keyword) => keyword.trim()).filter(Boolean),
       coverImage,
       document: {

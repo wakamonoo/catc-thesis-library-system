@@ -11,7 +11,7 @@ export default function Footer() {
   const {
     handleHomeClick,
     handleFeaturedClick,
-    handleCategoriesClick,
+    handleProgramsClick,
     handleAboutClick,
   } = useContext(NavigationContext);
 
@@ -52,7 +52,7 @@ export default function Footer() {
             </p>
           </button>
           <button
-            onClick={handleCategoriesClick}
+            onClick={handleProgramsClick}
             className="cursor-pointer group"
           >
             <p className="font-alt text-sm font-bold transition-all duration-200 text-panel group-hover:text-(--color-yellow) group-active:text-(--color-yellow)">

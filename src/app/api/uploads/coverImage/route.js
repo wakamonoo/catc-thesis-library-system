@@ -3,19 +3,19 @@ import cloudinary from "@/lib/cloudinary/config.js";
 export async function POST(request) {
   try {
     const formData = await request.formData();
-    const file = formData.get("file");
+    const coverImage = formData.get("coverImage");
 
-    if (!(file instanceof File)) {
+    if (!(coverImage instanceof File)) {
       return Response.json(
         {
           success: false,
-          message: "No file provided",
+          message: "No cover image provided",
         },
         { status: 400 },
       );
     }
 
-    if (file.size > 50 * 1024 * 1024) {
+    if (coverImage.size > 50 * 1024 * 1024) {
       return Response.json(
         {
           success: false,
@@ -25,7 +25,7 @@ export async function POST(request) {
       );
     }
 
-    const buffer = Buffer.from(await file.arrayBuffer());
+    const buffer = Buffer.from(await coverImage.arrayBuffer());
 
     const result = await new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(

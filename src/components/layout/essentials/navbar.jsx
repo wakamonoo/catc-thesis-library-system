@@ -23,7 +23,7 @@ export default function NavBar() {
     active,
     handleHomeClick,
     handleFeaturedClick,
-    handleCategoriesClick,
+    handleProgramsClick,
     handleAboutClick,
   } = useContext(NavigationContext);
   const menuOptionsButtonRef = useRef(null);
@@ -86,7 +86,7 @@ export default function NavBar() {
             </p>
           </button>
           <button
-            onClick={handleCategoriesClick}
+            onClick={handleProgramsClick}
             className="cursor-pointer group"
           >
             <p

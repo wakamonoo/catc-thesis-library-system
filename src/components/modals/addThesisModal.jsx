@@ -22,6 +22,7 @@ export default function AddThesisModal({ setShowAddThesisModal }) {
   const [program, setProgram] = useState("");
   const [educationLevel, setEducationLevel] = useState("");
   const [academicYear, setAcademicYear] = useState("");
+  const [previewPages, setPreviewPages] = useState("");
   const [keywords, setKeywords] = useState("");
   const [coverImage, setCoverImage] = useState(null);
   const [file, setFile] = useState(null);
@@ -33,6 +34,7 @@ export default function AddThesisModal({ setShowAddThesisModal }) {
       !program ||
       !educationLevel ||
       !academicYear.trim() ||
+      !previewPages.trim() ||
       !keywords.trim() ||
       !coverImage ||
       !file
@@ -44,7 +46,7 @@ export default function AddThesisModal({ setShowAddThesisModal }) {
     try {
       const coverImageFormData = new FormData();
 
-      coverImageFormData.append("file", coverImage);
+      coverImageFormData.append("coverImage", coverImage);
 
       const coverImageUploadRes = await fetch("/api/uploads/coverImage", {
         method: "POST",
@@ -70,6 +72,7 @@ export default function AddThesisModal({ setShowAddThesisModal }) {
       const fileFormData = new FormData();
 
       fileFormData.append("file", file);
+      fileFormData.append("previewPages", previewPages);
 
       const fileUploadRes = await fetch("/api/uploads/pdf", {
         method: "POST",
@@ -106,6 +109,7 @@ export default function AddThesisModal({ setShowAddThesisModal }) {
           program,
           educationLevel,
           academicYear,
+          previewPages,
           keywords: keywords
             .split(",")
             .map((keyword) => keyword.trim())
@@ -308,6 +312,24 @@ export default function AddThesisModal({ setShowAddThesisModal }) {
               value={academicYear}
               onChange={(e) => setAcademicYear(e.target.value)}
               placeholder="eg. 2025-2026"
+              required
+              className="w-full rounded-lg bg-panel px-4 py-2 text-sm text-normal outline-none placeholder:text-muted"
+            />
+          </div>
+
+          <div className="flex flex-col gap-2 w-full">
+            <label
+              htmlFor="thesis-preview-pages"
+              className="text-sm font-medium text-panel"
+            >
+              Preview Pages
+            </label>
+            <input
+              id="thesis-preview-pages"
+              type="text"
+              value={previewPages}
+              onChange={(e) => setPreviewPages(e.target.value)}
+              placeholder="eg. 1, 2, 4, 5"
               required
               className="w-full rounded-lg bg-panel px-4 py-2 text-sm text-normal outline-none placeholder:text-muted"
             />

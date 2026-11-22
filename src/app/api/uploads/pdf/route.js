@@ -1,14 +1,12 @@
 import cloudinary from "@/lib/cloudinary/config.js";
 
-const PREVIEW_PAGES = 2;
-
-function getPageTransformations(totalPages) {
+function getPageTransformations(totalPages, previewPages) {
   return Array.from({ length: totalPages }, (_, index) => {
     const page = index + 1;
 
     const transformations = [`pg_${page}`];
 
-    if (page > PREVIEW_PAGES) {
+    if (!previewPages.includes(page)) {
       transformations.push("e_blur:1000");
     }
 
@@ -24,6 +22,7 @@ export async function POST(request) {
   try {
     const formData = await request.formData();
     const file = formData.get("file");
+    const previewPagesInput = formData.get("previewPages");
 
     if (!(file instanceof File)) {
       return Response.json(
@@ -57,6 +56,13 @@ export async function POST(request) {
         { status: 400 },
       );
     }
+
+    const requestedPreviewPages = previewPagesInput
+      ? previewPagesInput
+          .split(",")
+          .map((page) => Number(page.trim()))
+          .filter((page) => Number.isInteger(page) && page > 0)
+      : [1, 2];
 
     const buffer = Buffer.from(await file.arrayBuffer());
 
@@ -106,7 +112,11 @@ export async function POST(request) {
       throw new Error("Unable to determine page count.");
     }
 
-    const eager = getPageTransformations(totalPages);
+    const previewPages = [
+      ...new Set(requestedPreviewPages.filter((page) => page <= totalPages)),
+    ];
+
+    const eager = getPageTransformations(totalPages, previewPages);
 
     const processed = await cloudinary.uploader.explicit(publicId, {
       resource_type: "image",
@@ -121,7 +131,7 @@ export async function POST(request) {
     const pages = processed.eager.map((page, index) => ({
       pageNumber: index + 1,
       url: page.secure_url,
-      blurred: index + 1 > PREVIEW_PAGES,
+      blurred: !previewPages.includes(index + 1),
     }));
 
     return Response.json({
@@ -132,7 +142,7 @@ export async function POST(request) {
         bytes: uploaded.bytes,
         originalFileName: file.name,
         totalPages,
-        previewPages: PREVIEW_PAGES,
+        previewPages: previewPages,
         pages,
       },
     });

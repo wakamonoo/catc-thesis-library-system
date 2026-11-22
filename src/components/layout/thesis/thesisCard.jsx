@@ -8,7 +8,7 @@ export default function ThesisCard({ thesis }) {
     <Link
       key={thesis.thesisId}
       href={`/thesis/${thesis.thesisId}`}
-      className="cursor-pointer flex flex-col bg-panel shadow-xs rounded-lg overflow-hidden transtition-all duration-200 group hover:-translate-y-1 active:-translate-y-1 hover:shadow-2xl active:shadow-2xl"
+      className={`"cursor-pointer flex flex-col bg-panel shadow-xs rounded-lg border-b-8 ${thesis.educationLevel === "College" ? "border-accent" : "border-yellow"} overflow-hidden transtition-all duration-200 group hover:-translate-y-1 active:-translate-y-1 hover:shadow-2xl active:shadow-2xl`}
     >
       <div className="relative w-full h-44">
         <Image
@@ -25,7 +25,7 @@ export default function ThesisCard({ thesis }) {
         </div>
       </div>
 
-      <div className="p-4 border-b-8 border-accent">
+      <div className="p-4">
         <p className="mt-2 font-alt tracking-wide text-base font-semibold leading-tight">
           {thesis.title}
         </p>

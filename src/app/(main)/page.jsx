@@ -1,6 +1,6 @@
 "use client";
 import About from "@/components/layout/home/about";
-import Categories from "@/components/layout/home/categories";
+import Programs from "@/components/layout/home/programs";
 import Featured from "@/components/layout/home/featured";
 import Footer from "@/components/layout/home/footer";
 import Hero from "@/components/layout/home/hero";
@@ -18,7 +18,7 @@ export default function Page() {
     <>
       <Hero />
       <Featured />
-      <Categories />
+      <Programs />
       <About />
       <Footer />
     </>

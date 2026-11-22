@@ -40,17 +40,17 @@ export const NavigationProvider = ({ children }) => {
     setActive("featured");
   };
 
-  const handleCategoriesClick = () => {
+  const handleProgramsClick = () => {
     if (pathname === "/") {
       document
-        .getElementById("categories")
+        .getElementById("programs")
         ?.scrollIntoView({ behavior: "smooth", block: "start" });
     } else {
       setIsLoading(true);
-      router.push("/#categories");
+      router.push("/#programs");
     }
 
-    setActive("categories");
+    setActive("programs");
   };
 
   const handleAboutClick = () => {
@@ -76,7 +76,7 @@ export const NavigationProvider = ({ children }) => {
         active,
         handleHomeClick,
         handleFeaturedClick,
-        handleCategoriesClick,
+        handleProgramsClick,
         handleAboutClick,
         activeAdminPage,
         handleAdminNavigation,
