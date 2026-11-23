@@ -4,9 +4,11 @@ import Link from "next/link";
 import { useContext } from "react";
 import { BsArrowRight } from "react-icons/bs";
 import ThesisCard from "../thesis/thesisCard";
+import { MdFindInPage } from "react-icons/md";
+import { FileLoader } from "@/components/loaders/fileLoader";
 
 export default function Featured() {
-  const { theses } = useContext(ThesisContext);
+  const { theses, thesesLoad } = useContext(ThesisContext);
 
   return (
     <div id="featured" className="p-4 sm:p-8 md:p-16 lg:px-32 xl:px-64">
@@ -33,11 +35,25 @@ export default function Featured() {
           <BsArrowRight className="text-sm text-muted transition-all duration-200 ggroup-hover:text-(--color-accent) group-active:text-(--color-accent)" />
         </Link>
       </div>
-      <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
-        {theses.map((thesis) => (
-          <ThesisCard key={thesis.thesisId} thesis={thesis} />
-        ))}
-      </div>
+
+      {thesesLoad ? (
+        <div className="flex flex-col items-center justify-center py-24">
+          <FileLoader />
+        </div>
+      ) : theses.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-24">
+          <MdFindInPage className="text-4xl text-muted shrink-0" />
+          <p className="mt-2 max-w-xs text-xs text-muted">
+            No featured theses yet
+          </p>
+        </div>
+      ) : (
+        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+          {theses.map((thesis) => (
+            <ThesisCard key={thesis.thesisId} thesis={thesis} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

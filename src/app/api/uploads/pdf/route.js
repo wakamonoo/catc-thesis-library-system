@@ -1,9 +1,16 @@
 import cloudinary from "@/lib/cloudinary/config.js";
 
-function getPageTransformations(totalPages, previewPages) {
+function getPageTransformations(totalPages) {
   return Array.from({ length: totalPages }, (_, index) => {
     const page = index + 1;
 
+    return [`pg_${page}`, "w_1200,c_limit", "f_jpg"].join("/");
+  });
+}
+
+function getBlurredPageTransformations(totalPages, previewPages) {
+  return Array.from({ length: totalPages }, (_, index) => {
+    const page = index + 1;
     const transformations = [`pg_${page}`];
 
     if (!previewPages.includes(page)) {
@@ -116,23 +123,47 @@ export async function POST(request) {
       ...new Set(requestedPreviewPages.filter((page) => page <= totalPages)),
     ];
 
-    const eager = getPageTransformations(totalPages, previewPages);
+    const clearEager = getPageTransformations(totalPages);
+    const blurredEager = getBlurredPageTransformations(
+      totalPages,
+      previewPages,
+    );
 
-    const processed = await cloudinary.uploader.explicit(publicId, {
-      resource_type: "image",
-      type: "authenticated",
-      eager,
-    });
+    const [clearProcessed, blurredProcessed] = await Promise.all([
+      cloudinary.uploader.explicit(publicId, {
+        resource_type: "image",
+        type: "authenticated",
+        eager: clearEager,
+      }),
 
-    if (!processed.eager || processed.eager.length !== totalPages) {
+      cloudinary.uploader.explicit(publicId, {
+        resource_type: "image",
+        type: "authenticated",
+        eager: blurredEager,
+      }),
+    ]);
+
+    if (
+      !clearProcessed.eager ||
+      !blurredProcessed.eager ||
+      clearProcessed.eager.length !== totalPages ||
+      blurredProcessed.eager.length !== totalPages
+    ) {
       throw new Error("Not all PDF pages were generated");
     }
 
-    const pages = processed.eager.map((page, index) => ({
-      pageNumber: index + 1,
-      url: page.secure_url,
-      blurred: !previewPages.includes(index + 1),
-    }));
+    const pages = clearProcessed.eager.map((page, index) => {
+      const blurred = !previewPages.includes(index + 1);
+
+      return {
+        pageNumber: index + 1,
+        previewUrl: blurred
+          ? blurredProcessed.eager[index].secure_url
+          : page.secure_url,
+        clearUrl: page.secure_url,
+        blurred,
+      };
+    });
 
     return Response.json({
       success: true,

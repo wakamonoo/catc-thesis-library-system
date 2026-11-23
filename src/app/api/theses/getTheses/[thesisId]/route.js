@@ -16,6 +16,8 @@ export async function GET(request, { params }) {
           thesisId: 1,
           title: 1,
           authors: 1,
+          educationLevel: 1,
+          academicYear: 1,
           program: 1,
           keywords: 1,
           createdAt: 1,

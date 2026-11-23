@@ -3,6 +3,9 @@ import ThesisReader from "@/components/layout/thesis/thesisReader";
 import { PageLoader } from "@/components/loaders/pageLoader";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { BiUpload } from "react-icons/bi";
+import { BsPeople, BsPeopleFill } from "react-icons/bs";
+import { FaSchool } from "react-icons/fa";
 import {
   MdCalendarToday,
   MdDescription,
@@ -47,39 +50,59 @@ export default function Page() {
 
   return (
     <div className="p-4 sm:p-8 md:p-16 lg:px-32 xl:px-64">
-      <div className="mt-16 md:mt-8 p-4 bg-panel rounded-2xl border border-border shadow-xs">
+      <div className="mt-16 md:mt-8 p-4 bg-accent rounded-2xl border border-border shadow-xs">
         <div className="flex flex-wrap items-center gap-2">
           <div className="flex items-center gap-2 bg-yellow px-4 py-2 rounded-full">
-            <MdSchool className="text-sm text-normal shrink-0" />
-            <p className="text-xs text-normal font-semibold">
+            <MdSchool className="text-base text-panel shrink-0" />
+            <p className="text-xs text-panel font-semibold">
               {thesis?.program || "Unspecified Program"}
             </p>
           </div>
-          <div className="flex items-center gap-2 bg-second px-4 py-2 rounded-full">
-            <MdDescription className="text-sm text-normal shrink-0" />
-            <p className="text-xs text-normal font-semibold">
+          <div className="flex items-center gap-2 bg-muted px-4 py-2 rounded-full">
+            <MdDescription className="text-base text-panel shrink-0" />
+            <p className="text-xs text-panel font-semibold">
               {thesis?.document?.totalPages || 0} Pages
             </p>
           </div>
         </div>
-        <p className="mt-4 text-xl font-bold text-accent leading-tight max-w-2xl">
-          {thesis?.title}
-        </p>
-        <div className="w-full h-px bg-border my-6" />
-        <p className="text-sm text-muted">
-          {thesis?.authors?.join(", ") || "Authors information unavailable"}
-        </p>
+
+        <div className="my-4 flex items-stretch gap-2">
+          <div className="w-1 self-stretch bg-yellow" />
+          <p className="text-xl font-bold text-panel max-w-2xl">
+            {thesis?.title}
+          </p>
+        </div>
+        <div className="flex items-start gap-4">
+          <BsPeopleFill className="mt-0.5 text-base text-panel shrink-0" />
+          <p className="text-sm text-panel">
+            {thesis?.authors?.join(", ") || "Authors information unavailable"}
+          </p>
+        </div>
 
         <div className="mt-4 flex flex-wrap items-center gap-x-10 gap-y-4">
-          <div className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-xl bg-second flex items-center justify-center">
-              <MdCalendarToday className="text-xl text-normal shrink-0" />
-            </div>
+          <div className="flex items-start gap-4"> 
+            <FaSchool className="text-xl text-panel shrink-0" />
             <div>
-              <p className="text-xs uppercase tracking-widest font-bold text-normal">
-                Date Uploaded
+              <p className="text-xs text-muted">Education Level</p>
+              <p className="text-sm font-bold text-panel">
+                {thesis?.educationLevel}
               </p>
-              <p className="text-xs text-normal">
+            </div>
+          </div>
+          <div className="flex items-start gap-4">
+            <MdCalendarToday className="text-xl text-panel shrink-0" />
+            <div>
+              <p className="text-xs text-muted">Academic Year</p>
+              <p className="text-sm font-bold text-panel">
+                {thesis?.academicYear}
+              </p>
+            </div>
+          </div>
+          <div className="flex items-start gap-4">
+            <BiUpload className="text-xl text-panel shrink-0" />
+            <div>
+              <p className="text-xs text-muted">Date Uploaded</p>
+              <p className="text-sm font-bold text-panel">
                 {new Date(thesis?.createdAt).toLocaleDateString("en-PH", {
                   year: "numeric",
                   month: "long",
@@ -88,32 +111,19 @@ export default function Page() {
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-xl bg-second flex items-center justify-center">
-              <MdDescription className="text-xl text-normal shrink-0" />
-            </div>
-            <div>
-              <p className="text-xs uppercase tracking-widest font-bold text-normal">
-                Document Length
-              </p>
-              <p className="text-xs text-normal">
-                {thesis?.document?.totalPages || 0} Pages
-              </p>
-            </div>
-          </div>
         </div>
         {thesis?.keywords?.length > 0 && (
           <div className="mt-4">
             <div className="flex items-center gap-2 mb-2">
-              <MdSell className="text-normal text-sm shrink-0" />
-              <p className="text-xs uppercase tracking-widest font-bold text-normal">
+              <MdSell className="text-panel text-base shrink-0" />
+              <p className="text-sm text-panel">
                 Research Keywords
               </p>
             </div>
             <div className="flex flex-wrap gap-2">
               {thesis?.keywords.map((keyword, index) => (
-                <div key={index} className="px-4 py-2 rounded-lg bg-second">
-                  <p className="text-xs text-muted capitalize">{keyword}</p>
+                <div key={index} className="px-4 py-2 rounded-full bg-muted">
+                  <p className="text-xs text-panel capitalize">{keyword}</p>
                 </div>
               ))}
             </div>

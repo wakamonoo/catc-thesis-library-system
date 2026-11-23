@@ -49,6 +49,8 @@ export default function SignInModal() {
       }
 
       setShowSignInModal(false);
+      setEmail("");
+      setPassword("");
 
       Swal.fire({
         toast: true,
@@ -66,9 +68,6 @@ export default function SignInModal() {
             "!text-base !font-[family-name:var(--font-normal)] !font-semibold !text-(--color-normal) !leading-4.5",
         },
       });
-
-      setEmail("");
-      setPassword("");
     } catch (err) {
       console.error("Sign in error:", err);
 
