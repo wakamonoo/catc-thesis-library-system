@@ -4,6 +4,8 @@ import { AuthenticationProvider } from "@/context/authenticationContext";
 import { ProgramProvider } from "@/context/programContext";
 import { ThesisProvider } from "@/context/thesisContext";
 import { LoaderProvider } from "@/context/loaderContext";
+import { SearchProvider } from "@/context/searchContext";
+import { EducationLevelProvider } from "@/context/educationLevelContext";
 
 export const metadata = {
   title: "CATC | Thesis Library System",
@@ -18,7 +20,11 @@ export default function RootLayout({ children }) {
           <LoaderProvider>
             <NavigationProvider>
               <ThesisProvider>
-                <ProgramProvider>{children}</ProgramProvider>
+                <ProgramProvider>
+                  <EducationLevelProvider>
+                    <SearchProvider>{children}</SearchProvider>
+                  </EducationLevelProvider>
+                </ProgramProvider>
               </ThesisProvider>
             </NavigationProvider>
           </LoaderProvider>
