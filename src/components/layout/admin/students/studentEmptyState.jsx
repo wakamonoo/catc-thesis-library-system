@@ -1,4 +1,3 @@
-
 import { MdAdd, MdPeople } from "react-icons/md";
 
 import TertiaryButton from "@/components/buttons/tertiaryButton";

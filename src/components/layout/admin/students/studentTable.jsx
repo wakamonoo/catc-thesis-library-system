@@ -1,4 +1,3 @@
-
 import StudentRow from "./studentRow";
 import StudentEmptyState from "./studentEmptyState";
 
