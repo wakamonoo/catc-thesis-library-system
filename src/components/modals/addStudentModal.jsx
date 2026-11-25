@@ -143,7 +143,7 @@ export default function AddStudentModal({
   );
 }
 
-// REUSABLE FORM INPUT
+
 function FormField({
   label,
   name,
