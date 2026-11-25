@@ -1,40 +1,17 @@
-import sample from "@/assets/hero-img.webp";
-import Image from "next/image";
-import { BiBook, BiCalendar } from "react-icons/bi";
-import { BsArrowRight, BsPerson } from "react-icons/bs";
-import { FaPerson } from "react-icons/fa6";
-
-const sampleData = [
-  {
-    id: 1,
-    title: "Development of a Web-Based Library Management System",
-    author: "Joven Bataller",
-    category: "Information Technology",
-    date: "Aug. 2025",
-    image: sample,
-  },
-  {
-    id: 2,
-    title:
-      "An Online Platform for Preserving Local Folklore and Cultural Heritage",
-    author: "Maria Santos",
-    category: "Information Technology",
-    date: "Mar. 2025",
-    image: sample,
-  },
-  {
-    id: 3,
-    title: "A Study on Sustainable Agricultural Practices in Albay",
-    author: "Juan Dela Cruz",
-    category: "Agriculture",
-    date: "Jan. 2025",
-    image: sample,
-  },
-];
+"use client";
+import { ThesisContext } from "@/context/thesisContext";
+import Link from "next/link";
+import { useContext } from "react";
+import { BsArrowRight } from "react-icons/bs";
+import ThesisCard from "../thesis/thesisCard";
+import { MdFindInPage } from "react-icons/md";
+import { FileLoader } from "@/components/loaders/fileLoader";
 
 export default function Featured() {
+  const { theses, thesesLoad } = useContext(ThesisContext);
+
   return (
-    <div id="featured" className="p-8 md:p-16 lg:px-32 xl:px-64">
+    <div id="featured" className="p-4 sm:p-8 md:p-16 lg:px-32 xl:px-64">
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 justify-between">
         <div className="flex flex-col">
           <div className="flex items-center gap-2">
@@ -48,53 +25,35 @@ export default function Featured() {
             College.
           </p>
         </div>
-        <button className="cursor-pointer flex items-center gap-2 group">
+        <Link
+          href="/theses"
+          className="cursor-pointer flex items-center gap-2 group"
+        >
           <p className="text-sm text-muted group-hover:text-(--color-accent) group-active:text-(--color-accent) whitespace-nowrap">
             Browse All
           </p>
           <BsArrowRight className="text-sm text-muted transition-all duration-200 ggroup-hover:text-(--color-accent) group-active:text-(--color-accent)" />
-        </button>
+        </Link>
       </div>
-      <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
-        {sampleData.map((thesis) => {
-          return (
-            <div
-              key={thesis.id}
-              className="cursor-pointer flex flex-col bg-panel shadow-xs rounded-lg overflow-hidden transtition-all duration-200 group hover:-translate-y-1 active:-translate-y-1 hover:shadow-2xl active:shadow-2xl"
-            >
-              <div className="relative w-full h-44">
-                <Image
-                  src={thesis.image}
-                  alt={thesis.title}
-                  fill
-                  className="object-cover"
-                />
-                <div className="absolute top-2 right-2 flex items-center gap-0.5 px-4 py-2 bg-(--color-accent)/90 rounded-full w-fit">
-                  <BiBook className="text-xs text-panel" />
-                  <p className="text-xs text-panel">{thesis.category}</p>
-                </div>
-              </div>
 
-              <div className="p-4 border-b-8 border-accent">
-                <p className="mt-2 font-alt tracking-wide text-base font-semibold leading-tight">
-                  {thesis.title}
-                </p>
-                <div className="mt-4 flex gap-4">
-                  <div className="flex items-center gap-2">
-                    <BsPerson className="text-sm text-muted shrink-0" />
-                    <p className="text-sm text-muted">{thesis.author}</p>
-                  </div>
-                  <div className="w-px h-4 bg-muted" />
-                  <div className="flex items-center gap-2">
-                    <BiCalendar className="text-sm text-muted shrink-0" />
-                    <p className="text-sm text-muted">{thesis.date}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
+      {thesesLoad ? (
+        <div className="flex flex-col items-center justify-center py-24">
+          <FileLoader />
+        </div>
+      ) : theses.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-24">
+          <MdFindInPage className="text-4xl text-muted shrink-0" />
+          <p className="mt-2 max-w-xs text-xs text-muted">
+            No featured theses yet
+          </p>
+        </div>
+      ) : (
+        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+          {theses.map((thesis) => (
+            <ThesisCard key={thesis.thesisId} thesis={thesis} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

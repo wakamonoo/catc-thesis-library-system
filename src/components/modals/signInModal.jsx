@@ -14,9 +14,11 @@ export default function SignInModal() {
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const { setShowSignInModal, setShowRegistrationModal } = useContext(
-    AuthenticationContext,
-  );
+  const {
+    setShowSignInModal,
+    setShowRegistrationModal,
+    setShowResetPasswordModal,
+  } = useContext(AuthenticationContext);
 
   const handleSignIn = async (e) => {
     e.preventDefault();
@@ -47,6 +49,8 @@ export default function SignInModal() {
       }
 
       setShowSignInModal(false);
+      setEmail("");
+      setPassword("");
 
       Swal.fire({
         toast: true,
@@ -64,9 +68,6 @@ export default function SignInModal() {
             "!text-base !font-[family-name:var(--font-normal)] !font-semibold !text-(--color-normal) !leading-4.5",
         },
       });
-
-      setEmail("");
-      setPassword("");
     } catch (err) {
       console.error("Sign in error:", err);
 
@@ -189,14 +190,20 @@ export default function SignInModal() {
             </div>
           </div>
           <div className="flex justify-end w-full">
-            <button className="cursor-pointer">
+            <button
+              onClick={() => {
+                setShowSignInModal(false);
+                setShowResetPasswordModal(true);
+              }}
+              className="cursor-pointer"
+            >
               <p className="text-xs text-muted transition-all duration-200 hover:opacity-60 active:opacity-60">
                 Forgot Password?
               </p>
             </button>
           </div>
           {errorMessage && (
-            <p className="w-full text-xs text-red-500 text-center">
+            <p className="mt-2 w-full text-xs text-error text-center">
               {errorMessage}
             </p>
           )}

@@ -10,7 +10,7 @@ export default function MenuOptions({
     active,
     handleHomeClick,
     handleFeaturedClick,
-    handleCategoriesClick,
+    handleProgramsClick,
     handleAboutClick,
   } = useContext(NavigationContext);
   const divRef = useRef(null);
@@ -69,7 +69,7 @@ export default function MenuOptions({
           </p>
         </button>
         <button
-          onClick={handleCategoriesClick}
+          onClick={handleProgramsClick}
           className="cursor-pointer group"
         >
           <p

@@ -11,12 +11,12 @@ export default function Footer() {
   const {
     handleHomeClick,
     handleFeaturedClick,
-    handleCategoriesClick,
+    handleProgramsClick,
     handleAboutClick,
   } = useContext(NavigationContext);
 
   return (
-    <div className="bg-accent mt-24 p-8 md:px-16 lg:px-32 xl:px-64">
+    <div className="bg-accent mt-24 p-4 sm:p-8 md:p-16 lg:px-32 xl:px-64">
       <div className="flex flex-col gap-12 sm:flex-row md:justify-between">
         <div className="flex items-center gap-2">
           <button onClick={handleHomeClick} className="cursor-pointer">
@@ -52,7 +52,7 @@ export default function Footer() {
             </p>
           </button>
           <button
-            onClick={handleCategoriesClick}
+            onClick={handleProgramsClick}
             className="cursor-pointer group"
           >
             <p className="font-alt text-sm font-bold transition-all duration-200 text-panel group-hover:text-(--color-yellow) group-active:text-(--color-yellow)">

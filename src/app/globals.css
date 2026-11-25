@@ -80,8 +80,8 @@
     background-color: var(--color-navy);
   }
 
-  .bg-text {
-    background-color: var(--color-text);
+  .bg-border {
+    background-color: var(--color-border);
   }
 
   .text-brand {
@@ -146,6 +146,10 @@
 
   .border-border {
     border-color: var(--color-border);
+  }
+
+  .border-yellow {
+    border-color: var(--color-yellow);
   }
 }
 

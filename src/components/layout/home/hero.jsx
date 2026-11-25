@@ -1,8 +1,14 @@
+"use client";
 import Image from "next/image";
 import heroImg from "@/assets/hero-img.webp";
 import { BiSearch } from "react-icons/bi";
+import { SearchContext } from "@/context/searchContext";
+import { useContext } from "react";
 
 export default function Hero() {
+  const { searchQuery, setSearchQuery, handleSearch } =
+    useContext(SearchContext);
+
   return (
     <div
       id="hero"
@@ -33,17 +39,28 @@ export default function Hero() {
           Your gateway to knowledge at CAT College Thesis Library. Find
           resources, access thesis, and explore more.
         </p>
-        <div className="flex items-center gap-2 bg-brand p-2 rounded-full mt-4">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSearch();
+          }}
+          className="flex items-center gap-2 bg-brand p-2 rounded-full mt-4"
+        >
           <BiSearch className="text-2xl text-normal" />
           <input
             type="text"
+            value={searchQuery}
+            onChange={(event) => setSearchQuery(event.target.value)}
             placeholder="Search for thesis title, author or keywords..."
             className="outline-none flex-1 min-w-0"
           />
-          <button className="cursor-pointer px-4 py-2 bg-yellow rounded-full">
+          <button
+            type="submit"
+            className="cursor-pointer px-4 py-2 bg-yellow rounded-full"
+          >
             <p className="text-normal text-sm">Search</p>
           </button>
-        </div>
+        </form>
       </div>
     </div>
   );

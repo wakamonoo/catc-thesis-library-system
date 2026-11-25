@@ -25,17 +25,11 @@ const features = [
     title: "Trusted Resources",
     description: "Reliable and verified acadamic works.",
   },
-  {
-    id: 4,
-    icon: BiCloud,
-    title: "Download Anytime",
-    description: "Get the resources you need, anytime.",
-  },
 ];
 
 export default function About() {
   return (
-    <div id="about" className="p-8 md:p-16 lg:px-32 xl:px-64">
+    <div id="about" className="p-4 sm:p-8 md:p-16 lg:px-32 xl:px-64">
       <div className="flex flex-col">
         <div className="flex items-center gap-2">
           <div className="w-12 h-px bg-yellow" />
@@ -47,7 +41,7 @@ export default function About() {
           A comprehensive library system built for your academic needs.
         </p>
       </div>
-      <div className="mt-8 grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4">
         {features.map((feature) => {
           const Icon = feature.icon;
 

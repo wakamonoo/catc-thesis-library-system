@@ -1,5 +1,10 @@
 "use client";
-import { MdClose, MdCloudUpload } from "react-icons/md";
+import {
+  MdClose,
+  MdCloudUpload,
+  MdImage,
+  MdPictureAsPdf,
+} from "react-icons/md";
 import Logo from "@/assets/catc-logo.jpg";
 import Image from "next/image";
 import { useContext, useState } from "react";
@@ -7,6 +12,7 @@ import { ProgramContext } from "@/context/programContext";
 import ActionButton from "../buttons/actionButton";
 import RegularButton from "../buttons/regularButton";
 import Swal from "sweetalert2";
+import { RiImage2Fill } from "react-icons/ri";
 
 export default function AddThesisModal({ setShowAddThesisModal }) {
   const { programs } = useContext(ProgramContext);
@@ -14,7 +20,11 @@ export default function AddThesisModal({ setShowAddThesisModal }) {
   const [title, setTitle] = useState("");
   const [authors, setAuthors] = useState("");
   const [program, setProgram] = useState("");
+  const [educationLevel, setEducationLevel] = useState("");
+  const [academicYear, setAcademicYear] = useState("");
+  const [previewPages, setPreviewPages] = useState("");
   const [keywords, setKeywords] = useState("");
+  const [coverImage, setCoverImage] = useState(null);
   const [file, setFile] = useState(null);
 
   const handleAddThesis = async () => {
@@ -22,7 +32,11 @@ export default function AddThesisModal({ setShowAddThesisModal }) {
       !title.trim() ||
       !authors.trim() ||
       !program ||
+      !educationLevel ||
+      !academicYear.trim() ||
+      !previewPages.trim() ||
       !keywords.trim() ||
+      !coverImage ||
       !file
     ) {
       setErrorMessage("Please complete all fields.");
@@ -30,30 +44,56 @@ export default function AddThesisModal({ setShowAddThesisModal }) {
     }
 
     try {
-      const formData = new FormData();
+      const coverImageFormData = new FormData();
 
-      formData.append("file", file);
+      coverImageFormData.append("coverImage", coverImage);
 
-      const uploadRes = await fetch("/api/uploads/pdf", {
+      const coverImageUploadRes = await fetch("/api/uploads/coverImage", {
         method: "POST",
-        body: formData,
+        body: coverImageFormData,
       });
 
-      if (!uploadRes.ok) {
-        const errorData = await uploadRes.json();
+      if (!coverImageUploadRes.ok) {
+        const errorData = await coverImageUploadRes.json();
 
-        if (uploadRes.status === 413) {
+        if (coverImageUploadRes.status === 413) {
           setErrorMessage("File is too large. Maximum size is 50MB.");
           return;
         }
-        if (uploadRes.status === 400) {
+        if (coverImageUploadRes.status === 400) {
           setErrorMessage(errorData.message || "Invalid PDF file.");
           return;
         }
         throw new Error(errorData.error || "Upload failed.");
       }
 
-      const { document } = await uploadRes.json();
+      const { url } = await coverImageUploadRes.json();
+
+      const fileFormData = new FormData();
+
+      fileFormData.append("file", file);
+      fileFormData.append("previewPages", previewPages);
+
+      const fileUploadRes = await fetch("/api/uploads/pdf", {
+        method: "POST",
+        body: fileFormData,
+      });
+
+      if (!fileUploadRes.ok) {
+        const errorData = await fileUploadRes.json();
+
+        if (fileUploadRes.status === 413) {
+          setErrorMessage("File is too large. Maximum size is 50MB.");
+          return;
+        }
+        if (fileUploadRes.status === 400) {
+          setErrorMessage(errorData.message || "Invalid PDF file.");
+          return;
+        }
+        throw new Error(errorData.error || "Upload failed.");
+      }
+
+      const { document } = await fileUploadRes.json();
 
       const res = await fetch("/api/theses/addThesis", {
         method: "POST",
@@ -67,10 +107,14 @@ export default function AddThesisModal({ setShowAddThesisModal }) {
             .map((author) => author.trim())
             .filter(Boolean),
           program,
+          educationLevel,
+          academicYear,
+          previewPages,
           keywords: keywords
             .split(",")
             .map((keyword) => keyword.trim())
             .filter(Boolean),
+          coverImage: url,
           document,
         }),
       });
@@ -127,7 +171,7 @@ export default function AddThesisModal({ setShowAddThesisModal }) {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-2xl overflow-hidden rounded-2xl border border-(--color-panel)/10 bg-accent shadow-2xl"
+        className="relative w-full max-w-2xl h-[80vh] overflow-y-auto custom-scroll rounded-2xl border border-(--color-panel)/10 bg-accent shadow-2xl"
       >
         <div className="flex items-center justify-end px-4 pt-4">
           <button
@@ -206,7 +250,7 @@ export default function AddThesisModal({ setShowAddThesisModal }) {
               value={program}
               onChange={(e) => setProgram(e.target.value)}
               required
-              className="w-full px-4 py-2 bg-panel rounded-lg outline-none"
+              className="w-full cursor-pointer px-4 py-2 border border-border bg-panel rounded-lg outline-none"
             >
               <option value="" disabled>
                 Select a program
@@ -222,6 +266,73 @@ export default function AddThesisModal({ setShowAddThesisModal }) {
                 </option>
               ))}
             </select>
+          </div>
+
+          <div className="flex flex-col gap-2 w-full">
+            <label
+              htmlFor="thesis-education-level"
+              className="text-sm font-medium text-panel"
+            >
+              Education Level
+            </label>
+
+            <select
+              id="thesis-education-level"
+              value={educationLevel}
+              onChange={(e) => setEducationLevel(e.target.value)}
+              required
+              className="w-full px-4 py-2 bg-panel rounded-lg outline-none"
+            >
+              <option value="" disabled>
+                Select a education level
+              </option>
+
+              <option
+                value="Senior High School"
+                className="text-normal truncate"
+              >
+                Senior High School
+              </option>
+              <option value="College" className="text-normal truncate">
+                College
+              </option>
+            </select>
+          </div>
+
+          <div className="flex flex-col gap-2 w-full">
+            <label
+              htmlFor="thesis-academic-year"
+              className="text-sm font-medium text-panel"
+            >
+              Academic Year
+            </label>
+            <input
+              id="thesis-academic-year"
+              type="text"
+              value={academicYear}
+              onChange={(e) => setAcademicYear(e.target.value)}
+              placeholder="eg. 2025-2026"
+              required
+              className="w-full rounded-lg bg-panel px-4 py-2 text-sm text-normal outline-none placeholder:text-muted"
+            />
+          </div>
+
+          <div className="flex flex-col gap-2 w-full">
+            <label
+              htmlFor="thesis-preview-pages"
+              className="text-sm font-medium text-panel"
+            >
+              Preview Pages
+            </label>
+            <input
+              id="thesis-preview-pages"
+              type="text"
+              value={previewPages}
+              onChange={(e) => setPreviewPages(e.target.value)}
+              placeholder="eg. 1, 2, 4, 5"
+              required
+              className="w-full rounded-lg bg-panel px-4 py-2 text-sm text-normal outline-none placeholder:text-muted"
+            />
           </div>
 
           <div className="flex flex-col gap-2 w-full">
@@ -243,26 +354,69 @@ export default function AddThesisModal({ setShowAddThesisModal }) {
           </div>
 
           <label
-            htmlFor="fileUpload"
-            className="flex min-h-32 w-full cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed border-(--color-border) bg-transparent p-4 text-center transition hover:border-accent hover:bg-second"
+            htmlFor="coverImageUpload"
+            className="w-full cursor-pointer flex gap-4 items-center justify-center p-4 border border-dashed border-(--color-panel)"
           >
-            <MdCloudUpload className="text-4xl text-muted" />
-            <p className="mt-2 text-sm font-bold text-yellow">
-              Attach thesis document
-            </p>
-            <div className="mt-2 max-w-full rounded-md bg-panel p-2 transition-all duration-200 hover:bg-(--color-panel)/80 active:bg-(--color-panel)/80">
-              <p className="truncate text-xs font-semibold text-normal">
-                {file ? file.name : "Choose file - No file chosen"}
+            {coverImage ? (
+              <img
+                src={URL.createObjectURL(coverImage)}
+                alt={coverImage.name}
+                className="w-20 h-20 object-cover rounded-lg shrink-0"
+              />
+            ) : (
+              <RiImage2Fill className="text-4xl text-muted shrink-0" />
+            )}
+            <div className="flex flex-col justify-center items-start flex-1 w-0 min-w-0">
+              <p className="mt-2 text-sm font-bold text-yellow">
+                Add Cover Image
               </p>
+              <div className="mt-2 max-w-full rounded-md bg-panel p-2 transition-all duration-200 hover:bg-(--color-panel)/80 active:bg-(--color-panel)/80">
+                <p className="truncate text-xs font-semibold text-normal">
+                  {coverImage
+                    ? coverImage.name
+                    : "Choose file - No file chosen"}
+                </p>
+              </div>
+              <span className="mt-2 text-xs text-muted">Maximum of 50mb</span>
             </div>
-            <span className="mt-2 text-xs text-muted">Maximum of 50mb</span>
+          </label>
+          <input
+            id="coverImageUpload"
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={(e) => {
+              const selectedCoverImage = e.target.files?.[0] ?? null;
+              setCoverImage(selectedCoverImage);
+            }}
+          />
+
+          <label
+            htmlFor="fileUpload"
+            className="w-full cursor-pointer flex gap-4 items-center justify-center p-4 border border-dashed border-(--color-panel)"
+          >
+            <MdPictureAsPdf className="text-4xl text-muted shrink-0" />
+            <div className="flex flex-col justify-center items-start flex-1 w-0 min-w-0">
+              <p className="mt-2 text-sm font-bold text-yellow">
+                Attach Thesis File
+              </p>
+              <div className="mt-2 max-w-full rounded-md bg-panel p-2 transition-all duration-200 hover:bg-(--color-panel)/80 active:bg-(--color-panel)/80">
+                <p className="truncate text-xs font-semibold text-normal">
+                  {file ? file.name : "Choose file - No file chosen"}
+                </p>
+              </div>
+              <span className="mt-2 text-xs text-muted">Maximum of 50mb</span>
+            </div>
           </label>
           <input
             id="fileUpload"
             type="file"
-            onChange={(e) => setFile(e.target.files?.[0] || null)}
             accept="application/pdf,.pdf"
             className="hidden"
+            onChange={(e) => {
+              const selectedFile = e.target.files?.[0] ?? null;
+              setFile(selectedFile);
+            }}
           />
 
           {errorMessage && (
