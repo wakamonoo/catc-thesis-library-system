@@ -31,12 +31,9 @@ export default function About() {
   return (
     <div id="about" className="p-4 sm:p-8 md:p-16 lg:px-32 xl:px-64">
       <div className="flex flex-col">
-        <div className="flex items-center gap-2">
-          <div className="w-12 h-px bg-yellow" />
-          <p className="font-alt tracking-widest text-base uppercase font-semibold text-yellow">
-            What We Offer
-          </p>
-        </div>
+        <p className="font-alt tracking-widest text-base uppercase font-semibold text-yellow">
+          What We Offer
+        </p>
         <p className="text-normal text-base leading-tight">
           A comprehensive library system built for your academic needs.
         </p>

@@ -1,172 +1,213 @@
 "use client";
+import {
+  MdClose,
+  MdCloudUpload,
+  MdImage,
+  MdPictureAsPdf,
+} from "react-icons/md";
+import Logo from "@/assets/catc-logo.jpg";
+import Image from "next/image";
+import { useContext, useState } from "react";
+import { ProgramContext } from "@/context/programContext";
+import ActionButton from "../buttons/actionButton";
+import RegularButton from "../buttons/regularButton";
+import Swal from "sweetalert2";
 
-import { MdClose, MdAdd } from "react-icons/md";
+export default function AddStudentModal({ setShowAddStudentModal }) {
+  const { programs } = useContext(ProgramContext);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [studentId, setStudentId] = useState("");
+  const [name, setName] = useState("");
+  const [program, setProgram] = useState("");
 
-import ActionButton from "@/components/buttons/actionButton";
-import PrimaryButton from "@/components/buttons/primaryButton";
-import TertiaryButton from "@/components/buttons/tertiaryButton";
+  const handleAddThesis = async () => {
+    if (!studentId.trim() || !name.trim() || !program) {
+      setErrorMessage("Please complete all fields.");
+      return;
+    }
 
-export default function AddStudentModal({
-  show,
-  editingStudent,
-  form,
-  formError,
-  programs,
-  onClose,
-  onChange,
-  onSubmit,
-}) {
-  if (!show) return null;
+    try {
+      const res = await fetch("/api/students/addStudent", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          studentId,
+          name,
+          program,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Failed to add student");
+      }
+
+      setShowAddStudentModal(false);
+
+      Swal.fire({
+        toast: true,
+        position: "bottom-start",
+        title: "Student successfully added!",
+        icon: "success",
+        timer: 2000,
+        showConfirmButton: false,
+        background: "var(--color-yellow)",
+        iconColor: "var(--color-success)",
+        customClass: {
+          popup:
+            "!w-full !max-w-xs !inline-flex !items-center !justify-center !text-normal !rounded-lg !shadow-lg !px-4 !py-2",
+          title:
+            "!text-base !font-[family-name:var(--font-normal)] !font-semibold !text-(--color-normal) !leading-4.5",
+        },
+      });
+    } catch (err) {
+      console.error("Student addition error:", err);
+      Swal.fire({
+        toast: true,
+        position: "bottom-start",
+        title: "Something went wrong try again later!",
+        icon: "error",
+        timer: 2000,
+        showConfirmButton: false,
+        background: "var(--color-yellow)",
+        iconColor: "var(--color-error)",
+        customClass: {
+          popup:
+            "!w-full !max-w-xs !inline-flex !items-center !justify-center !text-normal !rounded-lg !shadow-lg !px-4 !py-2",
+          title:
+            "!text-base !font-[family-name:var(--font-normal)] !font-semibold !text-(--color-normal) !leading-4.5",
+        },
+      });
+    }
+  };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/50 p-4">
-      <div className="my-auto w-full max-w-xl overflow-hidden rounded-xl border border-border bg-panel shadow-2xl">
-
-        {/* MODAL HEADER */}
-        <div className="flex items-center justify-between bg-accent px-6 py-5">
-          <div>
-            <h2 className="font-alt text-base font-bold uppercase tracking-wider text-panel">
-              {editingStudent ? "Edit Student" : "Add Student"}
-            </h2>
-
-            <p className="mt-1 text-xs text-muted">
-              {editingStudent
-                ? "Update the student's profile information."
-                : "Enter the student's information below."}
-            </p>
-          </div>
-
+    <div
+      onClick={() => setShowAddStudentModal(false)}
+      className="fixed inset-0 z-150 flex items-center justify-center bg-black/40 px-4 backdrop-blur-sm"
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="relative w-full max-w-md rounded-2xl border border-(--color-panel)/10 bg-accent shadow-2xl"
+      >
+        <div className="flex items-center justify-end px-4 pt-4">
           <button
-            type="button"
-            onClick={onClose}
-            className="cursor-pointer rounded-full p-2 text-panel transition hover:bg-white/10"
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowAddStudentModal(false);
+            }}
+            className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full transition-all duration-200 group hover:bg-(--color-panel) active:bg-(--color-panel) shrink-0"
           >
-            <MdClose className="text-xl" />
+            <MdClose className="text-xl text-panel transition-all duration-20 group-hover:text-(--color-accent) group-active:text-(--color-accent)" />
           </button>
         </div>
+        <div className="flex flex-col items-center justify-center px-4">
+          <div className="w-14 h-auto shrink-0">
+            <Image
+              src={Logo}
+              alt="CAT-C Logo"
+              className="w-full h-full object-contain"
+            />
+          </div>
+          <p className="mt-2 text-base text-panel uppercase font-semibold tracking-widest">
+            Add New Student
+          </p>
+          <span className="text-xs text-center text-muted">
+            Enter student details to get started.
+          </span>
+        </div>
 
-        {/* MODAL FORM */}
-        <form onSubmit={onSubmit} className="space-y-5 p-6">
+        <div className="flex flex-col gap-2 items-center justify-center p-4">
+          <div className="flex flex-col gap-2 w-full">
+            <label
+              htmlFor="student-studentId"
+              className="text-sm font-medium text-panel"
+            >
+              Student Id
+            </label>
+            <input
+              id="student-studentId"
+              type="text"
+              value={studentId}
+              onChange={(e) => setStudentId(e.target.value)}
+              placeholder="Enter Student Id."
+              required
+              className="w-full rounded-lg bg-panel px-4 py-2 text-sm text-normal outline-none placeholder:text-muted"
+            />
+          </div>
 
-          {/* FORM ERROR */}
-          {formError && (
-            <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-error">
-              {formError}
-            </div>
-          )}
+          <div className="flex flex-col gap-2 w-full">
+            <label
+              htmlFor="student-name"
+              className="text-sm font-medium text-panel"
+            >
+              Full Name
+            </label>
+            <input
+              id="student-name"
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Enter full name"
+              required
+              className="w-full rounded-lg bg-panel px-4 py-2 text-sm text-normal outline-none placeholder:text-muted"
+            />
+          </div>
 
-          {/* STUDENT ID */}
-          <FormField
-            label="Student ID"
-            name="studentId"
-            value={form.studentId}
-            onChange={onChange}
-            placeholder="e.g. 2024-001"
-          />
-
-          {/* FULL NAME */}
-          <FormField
-            label="Full Name"
-            name="name"
-            value={form.name}
-            onChange={onChange}
-            placeholder="Enter student's full name"
-          />
-
-          {/* EMAIL ADDRESS */}
-          <FormField
-            label="Email Address"
-            name="email"
-            type="email"
-            value={form.email}
-            onChange={onChange}
-            placeholder="student@example.com"
-          />
-
-          {/* PROGRAM FIELD */}
-          <div>
-            <label className="mb-2 block text-xs font-semibold text-accent">
-              College Program <span className="text-error">*</span>
+          <div className="flex flex-col gap-2 w-full">
+            <label
+              htmlFor="thesis-program"
+              className="text-sm font-medium text-panel"
+            >
+              Program
             </label>
 
             <select
-              name="program"
-              value={form.program}
-              onChange={onChange}
+              id="thesis-program"
+              value={program}
+              onChange={(e) => setProgram(e.target.value)}
               required
-              className="w-full rounded-lg border border-border bg-panel px-4 py-3 text-sm text-normal outline-none transition focus:border-accent"
+              className="w-full cursor-pointer px-4 py-2 border border-border bg-panel rounded-lg outline-none"
             >
-              <option value="">Select a program</option>
+              <option value="" disabled>
+                Select a program
+              </option>
 
               {programs.map((program) => (
-                <option key={program.id} value={program.title}>
+                <option
+                  key={program.id}
+                  value={program.title}
+                  className="text-normal truncate"
+                >
                   {program.title}
                 </option>
               ))}
             </select>
           </div>
 
-          {/* MODAL BUTTONS */}
-          <div className="flex flex-col-reverse gap-3 border-t border-border pt-5 sm:flex-row sm:justify-end">
+          {errorMessage && (
+            <p className="mt-2 text-xs w-full text-error text-center">
+              {errorMessage}
+            </p>
+          )}
 
-            {/* CANCEL BUTTON */}
-            <div className="sm:w-36">
-              <PrimaryButton onClick={onClose}>
-                <span className="text-sm font-semibold text-accent">
-                  Cancel
-                </span>
-              </PrimaryButton>
-            </div>
-
-            {/* SUBMIT BUTTON */}
-            <div className="sm:w-44">
-              {editingStudent ? (
-                <ActionButton type="submit">
-                  <span className="text-sm font-bold text-accent">
-                    Save Changes
-                  </span>
-                </ActionButton>
-              ) : (
-                <TertiaryButton type="submit">
-                  <MdAdd className="text-base text-panel shrink-0" />
-                  <p className="text-sm text-panel font-bold tracking-wide whitespace-nowrap">
-                    Add Student
-                  </p>
-                </TertiaryButton>
-              )}
-            </div>
-
+          <div className="mt-4 ml-auto flex gap-2 w-fit">
+            <RegularButton onClick={() => setShowAddStudentModal(false)}>
+              <p className="text-sm text-normal font-bold tracking-wide">
+                Cancel
+              </p>
+            </RegularButton>
+            <ActionButton onClick={handleAddThesis}>
+              <p className="text-sm text-normal font-bold tracking-wide">
+                Submit
+              </p>
+            </ActionButton>
           </div>
-        </form>
+        </div>
       </div>
-    </div>
-  );
-}
-
-
-function FormField({
-  label,
-  name,
-  value,
-  onChange,
-  placeholder,
-  type = "text",
-}) {
-  return (
-    <div>
-      <label className="mb-2 block text-xs font-semibold text-accent">
-        {label} <span className="text-error">*</span>
-      </label>
-
-      <input
-        type={type}
-        name={name}
-        value={value}
-        onChange={onChange}
-        placeholder={placeholder}
-        required
-        className="w-full rounded-lg border border-border bg-panel px-4 py-3 text-sm text-normal outline-none transition focus:border-accent"
-      />
     </div>
   );
 }

@@ -38,7 +38,7 @@ export default function Aside() {
         </div>
       </div>
 
-      <div className="mt-8 flex flex-col gap-2">
+      <div className="my-8 flex flex-col gap-2">
         <MenuButton
           onClick={() => handleAdminNavigation("dashboard")}
           activeAdminPage={activeAdminPage === "dashboard"}

@@ -144,7 +144,7 @@ export default function AddThesisModal({ setShowAddThesisModal }) {
         },
       });
     } catch (err) {
-      console.error("Thesis submission error", err);
+      console.error("Thesis submission error:", err);
       Swal.fire({
         toast: true,
         position: "bottom-start",

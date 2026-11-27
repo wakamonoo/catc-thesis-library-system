@@ -88,7 +88,7 @@ export async function POST(request) {
       newThesis,
     });
   } catch (err) {
-    console.error("Failed to add thesis.", err);
+    console.error("Failed to add thesis:", err);
 
     return Response.json(
       {

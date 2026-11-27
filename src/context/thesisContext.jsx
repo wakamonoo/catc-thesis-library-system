@@ -6,6 +6,7 @@ export const ThesisContext = createContext();
 export const ThesisProvider = ({ children }) => {
   const [theses, setTheses] = useState([]);
   const [thesesLoad, setThesesLoad] = useState(true);
+  const [showAddThesisModal, setShowAddThesisModal] = useState(false);
 
   const fetchTheses = async () => {
     try {
@@ -21,7 +22,7 @@ export const ThesisProvider = ({ children }) => {
 
       setTheses(data.result);
     } catch (err) {
-      console.error("failed to fetch products", err);
+      console.error("failed to fetch theses:", err);
       setTheses([]);
     } finally {
       setThesesLoad(false);
@@ -33,7 +34,9 @@ export const ThesisProvider = ({ children }) => {
   }, []);
 
   return (
-    <ThesisContext.Provider value={{ theses, thesesLoad }}>
+    <ThesisContext.Provider
+      value={{ theses, thesesLoad, fetchTheses, showAddThesisModal, setShowAddThesisModal }}
+    >
       {children}
     </ThesisContext.Provider>
   );

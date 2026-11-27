@@ -17,11 +17,11 @@ export async function GET(request) {
       result,
     });
   } catch (err) {
-    console.error("Failed to fetch theses", err);
+    console.error("Failed to fetch theses:", err);
     return Response.json(
       {
         success: false,
-        message: "Failed to fetch theses",
+        message: "Failed to fetch theses.",
       },
       { status: 500 },
     );

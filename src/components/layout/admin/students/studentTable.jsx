@@ -1,39 +1,33 @@
 import StudentRow from "./studentRow";
-import StudentEmptyState from "./studentEmptyState";
+import StudentEmptyState from "./emptyCollection";
+import { useState } from "react";
 
 export default function StudentTable({
   students,
   totalStudents,
-  isFiltered,
-  activeMenu,
-  setActiveMenu,
-  onAdd,
-  onEdit,
-  onToggleStatus,
-  onDelete,
+  hasFilters,
+  setShowAddStudentModal,
 }) {
+  const [activeMenu, setActiveMenu] = useState(null);
+
   return (
-    <div className="overflow-hidden rounded-xl border border-border bg-panel shadow-sm">
-      <div className="w-full overflow-x-auto">
-        <table className="w-full min-w-[850px] border-collapse text-left">
+    <div className="mt-4 overflow-hidden rounded-lg border border-border bg-panel shadow-sm">
+      <div className="w-full min-h-[50vh] overflow-x-auto">
+        <table className="w-full border-collapse text-left">
           <thead className="bg-brand">
             <tr className="border-b border-border">
               <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-muted">
                 Student
               </th>
-
               <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-muted">
                 Student ID
               </th>
-
               <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-muted">
                 Program
               </th>
-
               <th className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-muted">
                 Account Status
               </th>
-
               <th className="px-6 py-4 text-center text-xs font-bold uppercase tracking-wider text-muted">
                 Actions
               </th>
@@ -44,42 +38,34 @@ export default function StudentTable({
             {students.length > 0 ? (
               students.map((student) => (
                 <StudentRow
-                  key={student.id}
+                  key={student.studentId}
                   student={student}
                   activeMenu={activeMenu}
                   setActiveMenu={setActiveMenu}
-                  onEdit={onEdit}
-                  onToggleStatus={onToggleStatus}
-                  onDelete={onDelete}
                 />
               ))
             ) : (
-              <StudentEmptyState
-                isFiltered={isFiltered}
-                onAdd={onAdd}
-              />
+              <tr>
+                <td colSpan={5} className="p-0">
+                  <StudentEmptyState
+                    hasFilters={hasFilters}
+                    setShowAddStudentModal={setShowAddStudentModal}
+                  />
+                </td>
+              </tr>
             )}
           </tbody>
         </table>
       </div>
 
-      {/* TABLE FOOTER */}
       <div className="flex flex-col gap-2 border-t border-border px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-xs text-muted">
           Showing{" "}
-          <span className="font-semibold text-accent">
-            {students.length}
-          </span>{" "}
-          of{" "}
-          <span className="font-semibold text-accent">
-            {totalStudents}
-          </span>{" "}
+          <span className="font-semibold text-accent">{students.length}</span>{" "}
+          of <span className="font-semibold text-accent">{totalStudents}</span>{" "}
           students
         </p>
-
-        <p className="text-xs text-muted">
-          Student records
-        </p>
+        <p className="text-xs text-muted">Student records</p>
       </div>
     </div>
   );

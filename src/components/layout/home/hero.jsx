@@ -25,12 +25,9 @@ export default function Hero() {
       </div>
       <div className="absolute inset-0 bg-linear-to-r from-(--color-accent-dark)/90 via-(--color-accent-dark)/80 to-transparent" />
       <div className="relative p-8 md:px-16 lg:px-32 xl:px-64">
-        <div className="flex items-center gap-2">
-          <div className="w-12 h-px bg-yellow" />
-          <p className="font-alt tracking-widest text-base uppercase font-semibold text-yellow">
-            CAT College Thesis Library System
-          </p>
-        </div>
+        <p className="font-alt tracking-widest text-base uppercase font-semibold text-yellow">
+          CAT College Thesis Library System
+        </p>
         <h1 className="mt-4 text-4xl font-bold font-tall text-panel">
           Discover. Research.{" "}
           <span className="text-yellow font-alt italic">Learn More.</span>

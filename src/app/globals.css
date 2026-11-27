@@ -84,6 +84,14 @@
     background-color: var(--color-border);
   }
 
+  .bg-error {
+    background-color: var(--color-error);
+  }
+
+  .bg-success {
+    background-color: var(--color-success);
+  }
+
   .text-brand {
     color: var(--color-bg);
   }

@@ -19,12 +19,9 @@ export default function Programs() {
     <div id="programs" className="p-4 sm:p-8 md:p-16 lg:px-32 xl:px-64">
       <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-2">
         <div className="flex flex-col">
-          <div className="flex items-center gap-2">
-            <div className="w-12 h-px bg-yellow" />
-            <p className="font-alt tracking-widest text-base uppercase font-semibold text-yellow">
-              Programs
-            </p>
-          </div>
+          <p className="font-alt tracking-widest text-base uppercase font-semibold text-yellow">
+            Programs
+          </p>
           <p className="text-normal text-base leading-tight">
             Explore theses and research from our diverse programs.
           </p>

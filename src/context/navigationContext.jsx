@@ -31,7 +31,7 @@ export const NavigationProvider = ({ children }) => {
     if (pathname === "/") {
       document
         .getElementById("featured")
-        ?.scrollIntoView({ behavior: "smooth", block: "start" });
+        ?.scrollIntoView({ behavior: "smooth", block: "start" }); 
     } else {
       setIsLoading(true);
       router.push("/#featured");

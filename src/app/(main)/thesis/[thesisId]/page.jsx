@@ -74,13 +74,13 @@ export default function Page() {
         </div>
         <div className="flex items-start gap-4">
           <BsPeopleFill className="mt-0.5 text-base text-panel shrink-0" />
-          <p className="text-sm text-panel">
+          <p className="text-sm text-panel leading-tight">
             {thesis?.authors?.join(", ") || "Authors information unavailable"}
           </p>
         </div>
 
         <div className="mt-4 flex flex-wrap items-center gap-x-10 gap-y-4">
-          <div className="flex items-start gap-4"> 
+          <div className="flex items-start gap-4">
             <FaSchool className="text-xl text-panel shrink-0" />
             <div>
               <p className="text-xs text-muted">Education Level</p>
@@ -116,9 +116,7 @@ export default function Page() {
           <div className="mt-4">
             <div className="flex items-center gap-2 mb-2">
               <MdSell className="text-panel text-base shrink-0" />
-              <p className="text-sm text-panel">
-                Research Keywords
-              </p>
+              <p className="text-sm text-panel">Research Keywords</p>
             </div>
             <div className="flex flex-wrap gap-2">
               {thesis?.keywords.map((keyword, index) => (
