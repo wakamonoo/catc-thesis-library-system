@@ -21,7 +21,7 @@ export async function GET(request, { params }) {
           program: 1,
           keywords: 1,
           createdAt: 1,
-          document: 1,
+          "document.totalPages": 1,
         },
       },
     );

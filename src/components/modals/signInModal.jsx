@@ -48,6 +48,23 @@ export default function SignInModal() {
         return;
       }
 
+      const idToken = await user.getIdToken();
+      const statusResponse = await fetch("/api/users/checkStatus", {
+        headers: {
+          Authorization: `Bearer ${idToken}`,
+        },
+        cache: "no-store",
+      });
+      const statusData = await statusResponse.json();
+
+      if (!statusResponse.ok) {
+        await signOut(auth);
+        setErrorMessage(
+          statusData.message || "This student account is not active.",
+        );
+        return;
+      }
+
       setShowSignInModal(false);
       setEmail("");
       setPassword("");
@@ -216,7 +233,7 @@ export default function SignInModal() {
           </div>
           <div className="flex items-center gap-1">
             <p className="text-center text-xs text-muted">
-              Don't have an account?
+              Don&apos;t have an account?
             </p>
             <button
               type="button"

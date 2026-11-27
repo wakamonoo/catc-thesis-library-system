@@ -11,17 +11,23 @@ import {
 import { ProgramContext } from "@/context/programContext";
 import TertiaryButton from "@/components/buttons/tertiaryButton";
 import AddStudentModal from "@/components/modals/addStudentModal";
+import EditStudentModal from "@/components/modals/editStudentModal";
 import DeleteStudentModal from "@/components/modals/deleteStudentModal";
-import StudentFilters from "@/components/layout/admin/students/filters";
+import ConfirmSuspendStudentModal from "@/components/modals/confirmSuspendStudentModal";
+import ConfirmReactivateStudentModal from "@/components/modals/confirmReactivateStudentModal";
 import StudentTable from "@/components/layout/admin/students/studentTable";
 import StatCard from "../statCard";
 import { StudentContext } from "@/context/studentContext";
 import Filters from "@/components/layout/admin/students/filters";
+import { AuthenticationContext } from "@/context/authenticationContext";
+import Swal from "sweetalert2";
 
 export default function StudentsPage() {
   const { programs } = useContext(ProgramContext);
+  const { user } = useContext(AuthenticationContext);
   const {
     students,
+    setStudents,
     totalStudents,
     activeStudents,
     unRegisteredStudents,
@@ -29,6 +35,8 @@ export default function StudentsPage() {
   } = useContext(StudentContext);
 
   const [showAddStudentModal, setShowAddStudentModal] = useState(false);
+  const [studentAction, setStudentAction] = useState(null);
+  const [studentActionError, setStudentActionError] = useState("");
   const [search, setSearch] = useState("");
   const [selectedProgram, setSelectedProgram] = useState("All Programs");
   const [selectedStatus, setSelectedStatus] = useState("All Status");
@@ -47,8 +55,7 @@ export default function StudentsPage() {
         student.program === selectedProgram;
 
       const matchesStatus =
-        selectedStatus === "All Status" ||
-        student.accountStatus === selectedStatus;
+        selectedStatus === "All Status" || student.status === selectedStatus;
 
       return matchesSearch && matchesProgram && matchesStatus;
     });
@@ -58,6 +65,121 @@ export default function StudentsPage() {
     search ||
     selectedProgram !== "All Programs" ||
     selectedStatus !== "All Status";
+
+  const showStudentToast = (title, icon) => {
+    Swal.fire({
+      toast: true,
+      position: "bottom-start",
+      title,
+      icon,
+      timer: 2000,
+      showConfirmButton: false,
+      background: "var(--color-yellow)",
+      iconColor:
+        icon === "success" ? "var(--color-success)" : "var(--color-error)",
+      customClass: {
+        popup:
+          "!w-full !max-w-xs !inline-flex !items-center !justify-center !text-normal !rounded-lg !shadow-lg !px-4 !py-2",
+        title:
+          "!text-base !font-[family-name:var(--font-normal)] !font-semibold !text-(--color-normal) !leading-4.5",
+      },
+    });
+  };
+
+  const closeStudentModals = () => {
+    setShowAddStudentModal(false);
+    setStudentAction(null);
+    setStudentActionError("");
+  };
+
+  const openStudentAction = (type, student) => {
+    setStudentActionError("");
+    setStudentAction({ type, student });
+  };
+
+  const handleStudentSubmit = async (action, values = {}) => {
+    setStudentActionError("");
+
+    try {
+      if (!user) {
+        throw new Error("Please sign in first.");
+      }
+
+      const idToken = await user.getIdToken();
+      const selectedStudent = studentAction?.student;
+      const endpoints = {
+        add: "addStudent",
+        edit: "editStudent",
+        suspend: "suspendStudent",
+        reactivate: "reactivateStudent",
+        delete: "deleteStudent",
+      };
+      let body = values;
+
+      if (action === "edit") {
+        body = {
+          studentId: selectedStudent.studentId,
+          newStudentId: values.studentId,
+          name: values.name,
+          email: values.email,
+          program: values.program,
+        };
+      } else if (action === "suspend" || action === "reactivate") {
+        body = { studentId: selectedStudent.studentId };
+      } else if (action === "delete") {
+        body = { studentId: selectedStudent.studentId };
+      }
+
+      const response = await fetch(`/api/students/${endpoints[action]}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${idToken}`,
+        },
+        body: JSON.stringify(body),
+      });
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Student action failed.");
+      }
+
+      if (action === "add") {
+        setStudents((currentStudents) => [...currentStudents, data.newStudent]);
+      } else if (action === "edit") {
+        setStudents((currentStudents) =>
+          currentStudents.map((student) =>
+            student.studentId === selectedStudent.studentId
+              ? { ...student, ...data.updatedStudent }
+              : student,
+          ),
+        );
+      } else if (action === "suspend" || action === "reactivate") {
+        setStudents((currentStudents) =>
+          currentStudents.map((student) =>
+            student.studentId === selectedStudent.studentId
+              ? { ...student, ...data.updatedStudent }
+              : student,
+          ),
+        );
+      } else if (action === "delete") {
+        setStudents((currentStudents) =>
+          currentStudents.filter(
+            (student) => student.studentId !== selectedStudent.studentId,
+          ),
+        );
+      }
+
+      closeStudentModals();
+      showStudentToast(
+        data.message || "Student updated successfully.",
+        "success",
+      );
+    } catch (err) {
+      setStudentActionError(err.message || "Student action failed.");
+      showStudentToast(err.message || "Student action failed.", "error");
+    }
+  };
 
   return (
     <>
@@ -121,12 +243,56 @@ export default function StudentsPage() {
             totalStudents={totalStudents}
             hasFilters={hasFilters}
             setShowAddStudentModal={setShowAddStudentModal}
+            onEditStudent={(student) => openStudentAction("edit", student)}
+            onSuspendStudent={(student) =>
+              openStudentAction("suspend", student)
+            }
+            onReactivateStudent={(student) =>
+              openStudentAction("reactivate", student)
+            }
+            onDeleteStudent={(student) => openStudentAction("delete", student)}
           />
         </div>
       </section>
 
       {showAddStudentModal && (
-        <AddStudentModal setShowAddStudentModal={setShowAddStudentModal} />
+        <AddStudentModal
+          onClose={closeStudentModals}
+          onSubmit={(values) => handleStudentSubmit("add", values)}
+          errorMessage={studentActionError}
+        />
+      )}
+      {studentAction?.type === "edit" && (
+        <EditStudentModal
+          student={studentAction.student}
+          onClose={closeStudentModals}
+          onSubmit={(values) => handleStudentSubmit("edit", values)}
+          errorMessage={studentActionError}
+        />
+      )}
+      {studentAction?.type === "delete" && (
+        <DeleteStudentModal
+          student={studentAction.student}
+          onCancel={closeStudentModals}
+          onConfirm={() => handleStudentSubmit("delete")}
+          errorMessage={studentActionError}
+        />
+      )}
+      {studentAction?.type === "suspend" && (
+        <ConfirmSuspendStudentModal
+          student={studentAction.student}
+          onClose={closeStudentModals}
+          onConfirm={() => handleStudentSubmit("suspend")}
+          errorMessage={studentActionError}
+        />
+      )}
+      {studentAction?.type === "reactivate" && (
+        <ConfirmReactivateStudentModal
+          student={studentAction.student}
+          onClose={closeStudentModals}
+          onConfirm={() => handleStudentSubmit("reactivate")}
+          errorMessage={studentActionError}
+        />
       )}
     </>
   );

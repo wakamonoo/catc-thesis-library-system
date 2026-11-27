@@ -1,5 +1,7 @@
 import clientPromise from "@/lib/mongodb/config";
 import { createHmac, timingSafeEqual } from "crypto";
+import adminAuth from "@/lib/firebase/admin.js";
+import { getLinkedStudent } from "@/lib/students/getLinkedStudent.js";
 
 function verifyAccessToken(token, thesisId) {
   try {
@@ -25,11 +27,15 @@ function verifyAccessToken(token, thesisId) {
 
     const data = JSON.parse(Buffer.from(payload, "base64url").toString());
 
-    return (
-      data.thesisId === thesisId &&
-      typeof data.uid === "string" &&
-      data.exp > Date.now()
-    );
+    if (
+      data.thesisId !== thesisId ||
+      typeof data.uid !== "string" ||
+      data.exp <= Date.now()
+    ) {
+      return null;
+    }
+
+    return data;
   } catch {
     return false;
   }
@@ -70,7 +76,22 @@ export async function GET(request, { params }) {
     const previewPages = thesis.document?.previewPages || 0;
 
     const token = request.headers.get("X-Thesis-Access-Token");
-    const hasAccess = verifyAccessToken(token, thesisId);
+    const access = verifyAccessToken(token, thesisId);
+    const authorization = request.headers.get("Authorization");
+    let hasAccess = false;
+
+    if (access && authorization?.startsWith("Bearer ")) {
+      try {
+        const user = await adminAuth.verifyIdToken(
+          authorization.slice(7),
+          true,
+        );
+        const student = await getLinkedStudent(db, user.uid);
+        hasAccess = user.uid === access.uid && student?.status === "Active";
+      } catch {
+        hasAccess = false;
+      }
+    }
 
     const visiblePages = pages.map(
       ({ pageNumber, previewUrl, clearUrl, blurred }) => ({

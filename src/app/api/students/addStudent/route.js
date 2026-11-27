@@ -1,30 +1,64 @@
-import cloudinary from "@/lib/cloudinary/config";
 import clientPromise from "@/lib/mongodb/config.js";
-import { v4 as uuidv4 } from "uuid";
+import { requireAdmin } from "@/lib/firebase/requireAdmin.js";
 
 export async function POST(request) {
   try {
-    const { studentId, name, program } = await request.json();
+    const access = await requireAdmin(request);
 
-    if (!studentId.trim() || !name.trim() || !program) {
+    if (!access.authorized) {
       return Response.json(
         {
           success: false,
-          message: "Please provide all required thesis information.",
+          message: "Unauthorized.",
         },
+        { status: access.status },
+      );
+    }
+
+    const { studentId, name, email, program } = await request.json();
+
+    if (
+      typeof studentId !== "string" ||
+      typeof name !== "string" ||
+      typeof email !== "string" ||
+      typeof program !== "string" ||
+      !studentId.trim() ||
+      !name.trim() ||
+      !email.trim() ||
+      !program.trim()
+    ) {
+      return Response.json(
         {
-          status: 400,
+          success: false,
+          message: "Please provide all required student information.",
         },
+        { status: 400 },
       );
     }
 
     const client = await clientPromise;
     const mongodb = process.env.MONGODB;
     const db = client.db(mongodb);
+    const normalizedStudentId = studentId.trim();
+
+    const existingStudent = await db
+      .collection("students")
+      .findOne({ studentId: normalizedStudentId });
+
+    if (existingStudent) {
+      return Response.json(
+        {
+          success: false,
+          message: "A student with this Student ID already exists.",
+        },
+        { status: 409 },
+      );
+    }
 
     const newStudent = {
-      studentId: studentId.trim(),
+      studentId: normalizedStudentId,
       name: name.trim(),
+      email: email.trim(),
       program: program.trim(),
       status: "Not Registered",
       createdAt: new Date(),
@@ -34,7 +68,7 @@ export async function POST(request) {
 
     return Response.json({
       success: true,
-      message: "Student added succesfully",
+      message: "Student added successfully",
       newStudent,
     });
   } catch (err) {

@@ -6,7 +6,6 @@ import { ThesisProvider } from "@/context/thesisContext";
 import { LoaderProvider } from "@/context/loaderContext";
 import { SearchProvider } from "@/context/searchContext";
 import { EducationLevelProvider } from "@/context/educationLevelContext";
-import { StudentProvider } from "@/context/studentContext";
 
 export const metadata = {
   title: "CATC | Thesis Library System",
@@ -23,9 +22,7 @@ export default function RootLayout({ children }) {
               <ThesisProvider>
                 <ProgramProvider>
                   <EducationLevelProvider>
-                    <StudentProvider>
-                      <SearchProvider>{children}</SearchProvider>
-                    </StudentProvider>
+                    <SearchProvider>{children}</SearchProvider>
                   </EducationLevelProvider>
                 </ProgramProvider>
               </ThesisProvider>

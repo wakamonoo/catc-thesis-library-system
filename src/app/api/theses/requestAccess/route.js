@@ -1,5 +1,6 @@
 import adminAuth from "@/lib/firebase/admin.js";
 import clientPromise from "@/lib/mongodb/config.js";
+import { getLinkedStudent } from "@/lib/students/getLinkedStudent.js";
 import { createHmac, randomInt } from "crypto";
 import { Resend } from "resend";
 
@@ -36,7 +37,7 @@ export async function POST(request) {
     let user;
 
     try {
-      user = await adminAuth.verifyIdToken(authorization.slice(7));
+      user = await adminAuth.verifyIdToken(authorization.slice(7), true);
     } catch {
       return Response.json(
         {
@@ -70,6 +71,14 @@ export async function POST(request) {
     const client = await clientPromise;
     const mongodb = process.env.MONGODB;
     const db = client.db(mongodb);
+    const student = await getLinkedStudent(db, user.uid);
+
+    if (!student || student.status !== "Active") {
+      return Response.json(
+        { success: false, message: "This student account is not active." },
+        { status: 403 },
+      );
+    }
 
     const thesis = await db
       .collection("theses")

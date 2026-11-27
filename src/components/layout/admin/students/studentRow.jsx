@@ -6,7 +6,15 @@ import {
   MdMoreVert,
 } from "react-icons/md";
 
-export default function StudentRow({ student, activeMenu, setActiveMenu }) {
+export default function StudentRow({
+  student,
+  activeMenu,
+  setActiveMenu,
+  onEditStudent,
+  onSuspendStudent,
+  onReactivateStudent,
+  onDeleteStudent,
+}) {
   const studentOptionsButtonRef = useRef(null);
   const getInitials = (name) =>
     name
@@ -15,6 +23,8 @@ export default function StudentRow({ student, activeMenu, setActiveMenu }) {
       .slice(0, 2)
       .join("")
       .toUpperCase();
+
+
 
   return (
     <tr className="border-b border-border transition hover:bg-brand/50">
@@ -63,8 +73,13 @@ export default function StudentRow({ student, activeMenu, setActiveMenu }) {
           </button>
           {activeMenu === student.studentId && (
             <StudentOptions
+              student={student}
               setActiveMenu={setActiveMenu}
               studentOptionsButtonRef={studentOptionsButtonRef}
+              onEditStudent={onEditStudent}
+              onSuspendStudent={onSuspendStudent}
+              onReactivateStudent={onReactivateStudent}
+              onDeleteStudent={onDeleteStudent}
             />
           )}
         </div>

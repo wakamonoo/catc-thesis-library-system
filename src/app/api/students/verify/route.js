@@ -4,7 +4,12 @@ export async function POST(request) {
   try {
     const { studentId, email } = await request.json();
 
-    if (!studentId?.trim() || !email.trim()) {
+    if (
+      typeof studentId !== "string" ||
+      typeof email !== "string" ||
+      !studentId.trim() ||
+      !email.trim()
+    ) {
       return Response.json(
         {
           success: false,
@@ -30,6 +35,26 @@ export async function POST(request) {
           message: "Student ID and email do not match our records.",
         },
         { status: 400 },
+      );
+    }
+
+    if (student.status === "Suspended") {
+      return Response.json(
+        {
+          success: false,
+          message: "This student account is suspended.",
+        },
+        { status: 403 },
+      );
+    }
+
+    if (student.status !== "Not Registered") {
+      return Response.json(
+        {
+          success: false,
+          message: "This student is already registered.",
+        },
+        { status: 409 },
       );
     }
 

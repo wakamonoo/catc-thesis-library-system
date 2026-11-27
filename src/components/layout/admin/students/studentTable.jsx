@@ -7,12 +7,16 @@ export default function StudentTable({
   totalStudents,
   hasFilters,
   setShowAddStudentModal,
+  onEditStudent,
+  onSuspendStudent,
+  onReactivateStudent,
+  onDeleteStudent,
 }) {
   const [activeMenu, setActiveMenu] = useState(null);
 
   return (
     <div className="mt-4 overflow-hidden rounded-lg border border-border bg-panel shadow-sm">
-      <div className="w-full min-h-[50vh] overflow-x-auto">
+      <div className="w-full min-h-[80vh] overflow-x-auto">
         <table className="w-full border-collapse text-left">
           <thead className="bg-brand">
             <tr className="border-b border-border">
@@ -42,6 +46,10 @@ export default function StudentTable({
                   student={student}
                   activeMenu={activeMenu}
                   setActiveMenu={setActiveMenu}
+                  onEditStudent={onEditStudent}
+                  onSuspendStudent={onSuspendStudent}
+                  onReactivateStudent={onReactivateStudent}
+                  onDeleteStudent={onDeleteStudent}
                 />
               ))
             ) : (

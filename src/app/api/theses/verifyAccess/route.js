@@ -1,6 +1,7 @@
 import { createHmac, timingSafeEqual } from "crypto";
 import clientPromise from "@/lib/mongodb/config.js";
 import adminAuth from "@/lib/firebase/admin.js";
+import { getLinkedStudent } from "@/lib/students/getLinkedStudent.js";
 
 function hashOTP(otp) {
   return createHmac("sha256", process.env.OTP_SECRET).update(otp).digest("hex");
@@ -38,7 +39,7 @@ export async function POST(request) {
     let user;
 
     try {
-      user = await adminAuth.verifyIdToken(authorization.slice(7));
+      user = await adminAuth.verifyIdToken(authorization.slice(7), true);
     } catch {
       return Response.json(
         { success: false, message: "Invalid authentication." },
@@ -60,6 +61,14 @@ export async function POST(request) {
     const client = await clientPromise;
     const mongodb = process.env.MONGODB;
     const db = client.db(mongodb);
+    const student = await getLinkedStudent(db, user.uid);
+
+    if (!student || student.status !== "Active") {
+      return Response.json(
+        { success: false, message: "This student account is not active." },
+        { status: 403 },
+      );
+    }
 
     const record = await db.collection("thesisOTPs").findOne({
       uid: user.uid,

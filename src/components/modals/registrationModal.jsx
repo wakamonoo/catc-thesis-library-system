@@ -6,6 +6,7 @@ import Image from "next/image";
 import PrimaryButton from "../buttons/primaryButton";
 import {
   createUserWithEmailAndPassword,
+  deleteUser,
   sendEmailVerification,
   signOut,
   updateProfile,
@@ -27,6 +28,8 @@ export default function RegistrationModal() {
 
   const handleRegistration = async (e) => {
     e.preventDefault();
+    let createdUser = null;
+    let accountLinked = false;
 
     setErrorMessage("");
     setSuccessMessage("");
@@ -79,6 +82,7 @@ export default function RegistrationModal() {
       );
 
       const user = userCredential.user;
+      createdUser = user;
 
       await updateProfile(user, {
         displayName: name.trim(),
@@ -99,11 +103,11 @@ export default function RegistrationModal() {
       });
 
       const data = await res.json();
-
       if (!res.ok) {
         throw new Error(data.message || "Failed to register user");
       }
 
+      accountLinked = true;
       await sendEmailVerification(user);
 
       await signOut(auth);
@@ -120,7 +124,22 @@ export default function RegistrationModal() {
     } catch (err) {
       console.error("Registration error:", err);
 
-      if (err.message == "Student ID and email do not match our records.") {
+      if (createdUser && !accountLinked) {
+        try {
+          await deleteUser(createdUser);
+        } catch (cleanupError) {
+          console.error("Failed to remove incomplete Firebase account:", cleanupError);
+        }
+      }
+
+      if (
+        createdUser &&
+        auth.currentUser?.uid === createdUser.uid
+      ) {
+        await signOut(auth);
+      }
+
+      if (!err.code && err.message) {
         setErrorMessage(err.message);
         return;
       }

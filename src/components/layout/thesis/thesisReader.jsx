@@ -5,6 +5,8 @@ import { FileLoader } from "@/components/loaders/fileLoader";
 import RequestThesisAccessModal from "@/components/modals/requestThesisAccessModal";
 import { AuthenticationContext } from "@/context/authenticationContext";
 import { useContext, useEffect, useRef, useState } from "react";
+import { signOut } from "firebase/auth";
+import { auth } from "@/lib/firebase/config";
 import {
   MdChevronLeft,
   MdChevronRight,
@@ -38,13 +40,22 @@ export default function ThesisReader({ thesisId }) {
         setLoading(true);
         setErrorMessage("");
         setPages([]);
+        const headers = {};
+
+        if (accesToken) {
+          headers["X-Thesis-Access-Token"] = accesToken;
+
+          if (user) {
+            headers.Authorization = `Bearer ${await user.getIdToken()}`;
+          }
+        }
 
         const response = await fetch(
           `/api/theses/getTheses/${encodeURIComponent(thesisId)}/pages`,
           {
             cache: "no-store",
             signal: controller.signal,
-            headers: accesToken ? { "X-Thesis-Access-Token": accesToken } : {},
+            headers,
           },
         );
 
@@ -56,6 +67,10 @@ export default function ThesisReader({ thesisId }) {
 
         setPages(data.pages || []);
         setActivePage(data.pages?.[0]?.pageNumber || 1);
+
+        if (accesToken && !data.hasAccess) {
+          setAccessToken("");
+        }
       } catch (err) {
         if (err.name !== "AbortError") {
           console.error("Failed to fetch thesis pages:", err);
@@ -71,7 +86,47 @@ export default function ThesisReader({ thesisId }) {
     if (thesisId) fetchPages();
 
     return () => controller.abort();
-  }, [thesisId, accesToken]);
+  }, [thesisId, accesToken, user]);
+
+  useEffect(() => {
+    if (!user || !accesToken) return;
+
+    let cancelled = false;
+
+    const checkStudentStatus = async () => {
+      try {
+        const idToken = await user.getIdToken();
+        const response = await fetch("/api/users/checkStatus", {
+          headers: {
+            Authorization: `Bearer ${idToken}`,
+          },
+          cache: "no-store",
+        });
+
+        if (!response.ok && !cancelled) {
+          setAccessToken("");
+          setPages([]);
+          await signOut(auth);
+        }
+      } catch (err) {
+        if (
+          !cancelled &&
+          ["auth/user-disabled", "auth/user-token-expired"].includes(err.code)
+        ) {
+          setAccessToken("");
+          setPages([]);
+          await signOut(auth);
+        }
+      }
+    };
+
+    const interval = setInterval(checkStudentStatus, 30000);
+
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+    };
+  }, [user, accesToken]);
 
   useEffect(() => {
     if (!pages.length || loading) return;

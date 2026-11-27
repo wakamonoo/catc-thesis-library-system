@@ -8,7 +8,7 @@ export async function GET(request) {
 
     const result = await db
       .collection("theses")
-      .find()
+      .find({}, { projection: { "document.pages": 0 } })
       .sort({ createdAt: -1 })
       .toArray();
 
