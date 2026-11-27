@@ -2,9 +2,9 @@
 
 import { useContext, useEffect, useState } from "react";
 import { AuthenticationContext } from "@/context/authenticationContext";
-import { GiAngryEyes } from "react-icons/gi";
 import { useRouter } from "next/navigation";
 import { PageLoader } from "@/components/loaders/pageLoader";
+import { MdArrowBack, MdLockOutline } from "react-icons/md";
 
 export default function AdminGuard({ children }) {
   const { user, loading } = useContext(AuthenticationContext);
@@ -59,11 +59,30 @@ export default function AdminGuard({ children }) {
 
   if (status === "unauthorized") {
     return (
-      <div className="flex flex-col items-center justify-center w-full h-screen bg-brand opacity-40 p-8">
-        <GiAngryEyes className="text-9xl text-normal -m-8" />
-        <h4 className="font-bold text-2xl text-normal text-center">
-          Well, look who decided to crash the party
-        </h4>
+      <div className="flex min-h-screen w-full flex-col items-center justify-center bg-brand p-8 text-center">
+        <div className="flex h-20 w-20 items-center justify-center rounded-2xl border border-border bg-panel">
+          <MdLockOutline className="text-5xl text-muted" />
+        </div>
+
+        <p className="mt-6 text-sm font-semibold tracking-widest text-accent">
+          ERROR 403
+        </p>
+
+        <h4 className="mt-2 text-2xl font-bold text-normal">Access Denied</h4>
+
+        <p className="mt-2 max-w-md text-sm leading-relaxed text-muted">
+          You don't have permission to access this page. Please sign in with an
+          authorized account or contact your administrator for assistance.
+        </p>
+
+        <button
+          type="button"
+          onClick={() => router.back()}
+          className="cursor-pointer mt-4 flex items-center gap-2 rounded-lg border border-border bg-panel px-4 py-2 transition hover:bg-(--color-secondary) active:bg-(--color-secondary)"
+        >
+          <MdArrowBack className="text-base shrink-0" />
+          <p className="text-sm text-normal">Go Back</p>
+        </button>
       </div>
     );
   }

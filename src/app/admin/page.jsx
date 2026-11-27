@@ -13,7 +13,7 @@ export default function Page() {
   const { activeAdminPage } = useContext(NavigationContext);
 
   return (
-  
+    <AdminGuard>
       <StudentProvider>
         <>
           <Aside />
@@ -40,6 +40,6 @@ export default function Page() {
           </div>
         </>
       </StudentProvider>
-
+    </AdminGuard>
   );
 }
