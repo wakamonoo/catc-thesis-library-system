@@ -9,8 +9,10 @@ import MenuButton from "@/components/buttons/menuButton";
 import { PiStudent } from "react-icons/pi";
 import { BiBook } from "react-icons/bi";
 import AdminOptions from "@/components/options/adminOptions";
+import { UserContext } from "@/context/userContext";
 
 export default function Aside() {
+  const { user } = useContext(UserContext);
   const [showAdminOptions, setShowAdminOptions] = useState(false);
   const adminOptionsButtonRef = useRef(null);
   const { handleHomeClick, activeAdminPage, handleAdminNavigation } =
@@ -75,7 +77,7 @@ export default function Aside() {
           </div>
 
           <div className="min-w-0">
-            <p className="truncate text-sm font-bold text-panel">Yancy Nidea</p>
+            <p className="truncate text-sm font-bold text-panel">{user?.name}</p>
             <p className="text-xs text-muted">Administrator</p>
           </div>
 

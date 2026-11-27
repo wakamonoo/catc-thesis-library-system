@@ -14,21 +14,21 @@ export const AuthenticationProvider = ({ children }) => {
   const [showSignOutModal, setShowSignOutModal] = useState(false);
   const [showResetPasswordModal, setShowResetPasswordModal] = useState(false);
   const [showRegistrationModal, setShowRegistrationModal] = useState(false);
-  const [user, setUser] = useState(null);
+  const [firebaseUser, setFirebaseUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
+      setFirebaseUser(currentUser);
       setLoading(false);
     });
 
     return () => unsubscribe();
   });
 
-  const isSignedIn = !!user;
+  const isSignedIn = !!firebaseUser;
 
-  const isEmailVerified = user?.emailVerified ?? false;
+  const isEmailVerified = firebaseUser?.emailVerified ?? false;
 
   const signOutUser = async () => {
     await firebaseSignOut(auth);
@@ -37,7 +37,7 @@ export const AuthenticationProvider = ({ children }) => {
   return (
     <AuthenticationContext.Provider
       value={{
-        user,
+        firebaseUser,
         loading,
         isSignedIn,
         isEmailVerified,

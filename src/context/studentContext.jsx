@@ -5,16 +5,16 @@ import { AuthenticationContext } from "@/context/authenticationContext";
 export const StudentContext = createContext(null);
 
 export const StudentProvider = ({ children }) => {
-  const { user } = useContext(AuthenticationContext);
+  const { firebaseUser } = useContext(AuthenticationContext);
   const [students, setStudents] = useState([]);
   const [studentsLoad, setStudentsLoad] = useState(true);
 
   useEffect(() => {
-    if (!user) return;
+    if (!firebaseUser) return;
 
     const fetchStudents = async () => {
       try {
-        const idToken = await user.getIdToken();
+        const idToken = await firebaseUser.getIdToken();
         const res = await fetch("/api/students/getStudents", {
           method: "GET",
           headers: {
@@ -39,7 +39,7 @@ export const StudentProvider = ({ children }) => {
     };
 
     fetchStudents();
-  }, [user]);
+  }, [firebaseUser]);
 
   const totalStudents = students.length;
 

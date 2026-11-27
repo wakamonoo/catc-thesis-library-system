@@ -20,7 +20,7 @@ import {
 
 export default function ThesisReader({ thesisId }) {
   const [pages, setPages] = useState([]);
-  const { user, setShowSignInModal } = useContext(AuthenticationContext);
+  const { firebaseUser, setShowSignInModal } = useContext(AuthenticationContext);
   const [loading, setLoading] = useState(true);
   const [showRequestThesisAccessModal, setShowRequestThesisAccessModal] =
     useState(false);
@@ -45,8 +45,8 @@ export default function ThesisReader({ thesisId }) {
         if (accesToken) {
           headers["X-Thesis-Access-Token"] = accesToken;
 
-          if (user) {
-            headers.Authorization = `Bearer ${await user.getIdToken()}`;
+          if (firebaseUser) {
+            headers.Authorization = `Bearer ${await firebaseUser.getIdToken()}`;
           }
         }
 
@@ -86,16 +86,16 @@ export default function ThesisReader({ thesisId }) {
     if (thesisId) fetchPages();
 
     return () => controller.abort();
-  }, [thesisId, accesToken, user]);
+  }, [thesisId, accesToken, firebaseUser]);
 
   useEffect(() => {
-    if (!user || !accesToken) return;
+    if (!firebaseUser || !accesToken) return;
 
     let cancelled = false;
 
     const checkStudentStatus = async () => {
       try {
-        const idToken = await user.getIdToken();
+        const idToken = await firebaseUser.getIdToken();
         const response = await fetch("/api/users/checkStatus", {
           headers: {
             Authorization: `Bearer ${idToken}`,
@@ -126,7 +126,7 @@ export default function ThesisReader({ thesisId }) {
       cancelled = true;
       clearInterval(interval);
     };
-  }, [user, accesToken]);
+  }, [firebaseUser, accesToken]);
 
   useEffect(() => {
     if (!pages.length || loading) return;
@@ -344,7 +344,7 @@ export default function ThesisReader({ thesisId }) {
                         <div className="w-fite">
                           <SecondaryButton
                             onClick={() => {
-                              if (user) {
+                              if (firebaseUser) {
                                 setShowRequestThesisAccessModal(true);
                               } else {
                                 setShowSignInModal(true);

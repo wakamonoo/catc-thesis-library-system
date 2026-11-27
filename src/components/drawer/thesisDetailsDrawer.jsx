@@ -9,11 +9,16 @@ import {
   MdCalendarMonth,
   MdSchool,
   MdPeople,
+  MdEdit,
+  MdDelete,
 } from "react-icons/md";
+import PrimaryButton from "../buttons/primaryButton";
 
 export default function ThesisDetailsDrawer({
   selectedThesis,
   setSelectedThesis,
+  onEditThesis,
+  onDeleteThesis,
 }) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -86,7 +91,7 @@ export default function ThesisDetailsDrawer({
           </button>
         </div>
 
-        <div className="p-4">
+        <div className="min-h-0 flex-1 overflow-y-auto custom-scroll p-4">
           <p className="text-base font-medium text-panel uppercase leading-tight tracking-wide">
             {selectedThesis.title}
           </p>
@@ -169,6 +174,22 @@ export default function ThesisDetailsDrawer({
                   : "Not available"}
               </p>
             </div>
+          </div>
+          <div className="mt-6 ml-auto w-fit flex gap-2">
+            <PrimaryButton
+              type="button"
+              onClick={() => onEditThesis(selectedThesis)}
+            >
+              <p className="text-sm text-panel font-bold tracking-wide">Edit</p>
+            </PrimaryButton>
+            <PrimaryButton
+              type="button"
+              onClick={() => onDeleteThesis(selectedThesis)}
+            >
+              <p className="text-sm text-panel font-bold tracking-wide">
+                Delete
+              </p>
+            </PrimaryButton>
           </div>
         </div>
       </div>

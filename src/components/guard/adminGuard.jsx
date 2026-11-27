@@ -7,7 +7,7 @@ import { PageLoader } from "@/components/loaders/pageLoader";
 import { MdArrowBack, MdLockOutline } from "react-icons/md";
 
 export default function AdminGuard({ children }) {
-  const { user, loading } = useContext(AuthenticationContext);
+  const { firebaseUser, loading } = useContext(AuthenticationContext);
   const [status, setStatus] = useState("checking");
   const [verifiedUid, setVerifiedUid] = useState(null);
   const router = useRouter();
@@ -15,7 +15,7 @@ export default function AdminGuard({ children }) {
   useEffect(() => {
     if (loading) return;
 
-    if (!user) {
+    if (!firebaseUser) {
       router.replace("/admin/login");
       return;
     }
@@ -24,7 +24,7 @@ export default function AdminGuard({ children }) {
 
     async function checkAdmin() {
       try {
-        const idToken = await user.getIdToken();
+        const idToken = await firebaseUser.getIdToken();
         const response = await fetch("/api/admin/verify", {
           headers: {
             Authorization: `Bearer ${idToken}`,
@@ -34,14 +34,14 @@ export default function AdminGuard({ children }) {
 
         if (!cancelled) {
           setStatus(response.ok ? "authorized" : "unauthorized");
-          setVerifiedUid(user.uid);
+          setVerifiedUid(firebaseUser.uid);
         }
       } catch (err) {
         console.error("Admin verification failed:", err);
 
         if (!cancelled) {
           setStatus("unauthorized");
-          setVerifiedUid(user.uid);
+          setVerifiedUid(firebaseUser.uid);
         }
       }
     }
@@ -51,9 +51,14 @@ export default function AdminGuard({ children }) {
     return () => {
       cancelled = true;
     };
-  }, [user, loading, router]);
+  }, [firebaseUser, loading, router]);
 
-  if (loading || !user || verifiedUid !== user.uid || status === "checking") {
+  if (
+    loading ||
+    !firebaseUser ||
+    verifiedUid !== firebaseUser.uid ||
+    status === "checking"
+  ) {
     return <PageLoader />;
   }
 

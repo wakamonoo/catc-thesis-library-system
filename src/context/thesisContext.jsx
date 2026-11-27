@@ -35,7 +35,14 @@ export const ThesisProvider = ({ children }) => {
 
   return (
     <ThesisContext.Provider
-      value={{ theses, thesesLoad, fetchTheses, showAddThesisModal, setShowAddThesisModal }}
+      value={{
+        theses,
+        setTheses,
+        thesesLoad,
+        fetchTheses,
+        showAddThesisModal,
+        setShowAddThesisModal,
+      }}
     >
       {children}
     </ThesisContext.Provider>

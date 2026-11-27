@@ -18,13 +18,13 @@ export default function ConfirmSuspendStudentModal({
       className="fixed inset-0 z-150 flex items-center justify-center bg-black/40 px-4 backdrop-blur-sm"
     >
       <div
-        onClick={(event) => event.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
         className="relative w-full max-w-md rounded-2xl border border-(--color-panel)/10 bg-accent shadow-2xl"
       >
         <div className="flex items-center justify-end px-4 pt-4">
           <button
-            onClick={(event) => {
-              event.stopPropagation();
+            onClick={(e) => {
+              e.stopPropagation();
               onClose();
             }}
             className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full transition-all duration-200 group hover:bg-(--color-panel) active:bg-(--color-panel) shrink-0"
@@ -63,7 +63,7 @@ export default function ConfirmSuspendStudentModal({
             </RegularButton>
             <ActionButton onClick={onConfirm}>
               <p className="text-sm text-normal font-bold tracking-wide whitespace-nowrap">
-                Suspend Student
+                Suspend
               </p>
             </ActionButton>
           </div>

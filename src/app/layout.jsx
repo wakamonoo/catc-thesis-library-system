@@ -6,6 +6,7 @@ import { ThesisProvider } from "@/context/thesisContext";
 import { LoaderProvider } from "@/context/loaderContext";
 import { SearchProvider } from "@/context/searchContext";
 import { EducationLevelProvider } from "@/context/educationLevelContext";
+import { UserProvider } from "@/context/userContext";
 
 export const metadata = {
   title: "CATC | Thesis Library System",
@@ -17,17 +18,19 @@ export default function RootLayout({ children }) {
     <html lang="en" className={`scroll-smooth`}>
       <body className="min-h-full flex flex-col">
         <AuthenticationProvider>
-          <LoaderProvider>
-            <NavigationProvider>
-              <ThesisProvider>
-                <ProgramProvider>
-                  <EducationLevelProvider>
-                    <SearchProvider>{children}</SearchProvider>
-                  </EducationLevelProvider>
-                </ProgramProvider>
-              </ThesisProvider>
-            </NavigationProvider>
-          </LoaderProvider>
+          <UserProvider>
+            <LoaderProvider>
+              <NavigationProvider>
+                <ThesisProvider>
+                  <ProgramProvider>
+                    <EducationLevelProvider>
+                      <SearchProvider>{children}</SearchProvider>
+                    </EducationLevelProvider>
+                  </ProgramProvider>
+                </ThesisProvider>
+              </NavigationProvider>
+            </LoaderProvider>
+          </UserProvider>
         </AuthenticationProvider>
       </body>
     </html>

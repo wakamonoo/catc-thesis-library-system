@@ -23,15 +23,21 @@ import StatCard from "../statCard";
 import { ProgramContext } from "@/context/programContext";
 import { FileLoader } from "@/components/loaders/fileLoader";
 import AddThesisModal from "@/components/modals/addThesisModal";
+import EditThesisModal from "@/components/modals/editThesisModal";
+import DeleteThesisModal from "@/components/modals/deleteThesisModal";
 import ThesisDetailsDrawer from "@/components/drawer/thesisDetailsDrawer";
 import Filters from "../library/filters";
+import { AuthenticationContext } from "@/context/authenticationContext";
+import Swal from "sweetalert2";
 
 const ITEMS_PER_PAGE = 8;
 
 export default function Library() {
   const { programs } = useContext(ProgramContext);
+  const { firebaseUser } = useContext(AuthenticationContext);
   const {
     theses,
+    setTheses,
     fetchTheses,
     thesesLoad,
     showAddThesisModal,
@@ -44,6 +50,8 @@ export default function Library() {
   const [sortOrder, setSortOrder] = useState("newest");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedThesis, setSelectedThesis] = useState(null);
+  const [thesisAction, setThesisAction] = useState(null);
+  const [thesisActionError, setThesisActionError] = useState("");
 
   useEffect(() => {
     fetchTheses();
@@ -126,6 +134,93 @@ export default function Library() {
     selectedLevel === "All"
       ? programs
       : programs.filter((program) => program.academicLevel === selectedLevel);
+
+  const showThesisToast = (title, icon) => {
+    Swal.fire({
+      toast: true,
+      position: "bottom-start",
+      title,
+      icon,
+      timer: 2000,
+      showConfirmButton: false,
+      background: "var(--color-yellow)",
+      iconColor:
+        icon === "success" ? "var(--color-success)" : "var(--color-error)",
+      customClass: {
+        popup:
+          "!w-full !max-w-xs !inline-flex !items-center !justify-center !text-normal !rounded-lg !shadow-lg !px-4 !py-2",
+        title:
+          "!text-base !font-[family-name:var(--font-normal)] !font-semibold !text-(--color-normal) !leading-4.5",
+      },
+    });
+  };
+
+  const closeThesisModals = () => {
+    setThesisAction(null);
+    setThesisActionError("");
+  };
+
+  const openThesisAction = (type, thesis) => {
+    setThesisActionError("");
+    setSelectedThesis(null);
+    setThesisAction({ type, thesis });
+  };
+
+  const handleThesisSubmit = async (action, values = {}) => {
+    setThesisActionError("");
+
+    try {
+      if (!firebaseUser) {
+        throw new Error("Please sign in first.");
+      }
+
+      const idToken = await firebaseUser.getIdToken();
+      const selectedRecord = thesisAction?.thesis;
+      const endpoints = {
+        edit: "editThesis",
+        delete: "deleteThesis",
+      };
+      const body =
+        action === "edit"
+          ? { thesisId: selectedRecord.thesisId, ...values }
+          : { thesisId: selectedRecord.thesisId };
+      const response = await fetch(`/api/theses/${endpoints[action]}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${idToken}`,
+        },
+        body: JSON.stringify(body),
+      });
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Thesis action failed.");
+      }
+
+      if (action === "edit") {
+        setTheses((currentTheses) =>
+          currentTheses.map((thesis) =>
+            thesis.thesisId === selectedRecord.thesisId
+              ? { ...thesis, ...data.updatedThesis }
+              : thesis,
+          ),
+        );
+      } else if (action === "delete") {
+        setTheses((currentTheses) =>
+          currentTheses.filter(
+            (thesis) => thesis.thesisId !== selectedRecord.thesisId,
+          ),
+        );
+      }
+
+      closeThesisModals();
+      showThesisToast(data.message || "Thesis updated successfully.", "success");
+    } catch (err) {
+      setThesisActionError(err.message || "Thesis action failed.");
+      showThesisToast(err.message || "Thesis action failed.", "error");
+    }
+  };
 
   return (
     <section className="mx-auto space-y-6 px-4 py-10 sm:px-8 md:px-10 lg:px-12">
@@ -250,6 +345,24 @@ export default function Library() {
         <ThesisDetailsDrawer
           selectedThesis={selectedThesis}
           setSelectedThesis={setSelectedThesis}
+          onEditThesis={(thesis) => openThesisAction("edit", thesis)}
+          onDeleteThesis={(thesis) => openThesisAction("delete", thesis)}
+        />
+      )}
+      {thesisAction?.type === "edit" && (
+        <EditThesisModal
+          thesis={thesisAction.thesis}
+          onClose={closeThesisModals}
+          onSubmit={(values) => handleThesisSubmit("edit", values)}
+          errorMessage={thesisActionError}
+        />
+      )}
+      {thesisAction?.type === "delete" && (
+        <DeleteThesisModal
+          thesis={thesisAction.thesis}
+          onCancel={closeThesisModals}
+          onConfirm={() => handleThesisSubmit("delete")}
+          errorMessage={thesisActionError}
         />
       )}
     </section>

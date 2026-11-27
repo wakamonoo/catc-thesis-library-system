@@ -24,7 +24,7 @@ import Swal from "sweetalert2";
 
 export default function StudentsPage() {
   const { programs } = useContext(ProgramContext);
-  const { user } = useContext(AuthenticationContext);
+  const { firebaseUser } = useContext(AuthenticationContext);
   const {
     students,
     setStudents,
@@ -101,11 +101,11 @@ export default function StudentsPage() {
     setStudentActionError("");
 
     try {
-      if (!user) {
+      if (!firebaseUser) {
         throw new Error("Please sign in first.");
       }
 
-      const idToken = await user.getIdToken();
+      const idToken = await firebaseUser.getIdToken();
       const selectedStudent = studentAction?.student;
       const endpoints = {
         add: "addStudent",

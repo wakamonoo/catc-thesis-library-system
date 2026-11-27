@@ -11,8 +11,8 @@ export default function RequestThesisAccessModal({
   setShowRequestThesisAccessModal,
   setAccessToken,
 }) {
-  const { user } = useContext(AuthenticationContext);
-  const email = user?.email || "";
+  const { firebaseUser } = useContext(AuthenticationContext);
+  const email = firebaseUser?.email || "";
   const [otp, setOtp] = useState("");
   const [step, setStep] = useState("email");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -27,11 +27,11 @@ export default function RequestThesisAccessModal({
     try {
       setIsSubmitting(true);
 
-      if (!user) {
+      if (!firebaseUser) {
         throw new Error("Please sign in first.");
       }
 
-      const idToken = await user.getIdToken();
+      const idToken = await firebaseUser.getIdToken();
 
       const response = await fetch("/api/theses/requestAccess", {
         method: "POST",
@@ -66,11 +66,11 @@ export default function RequestThesisAccessModal({
     try {
       setIsSubmitting(true);
 
-      if (!user) {
+      if (!firebaseUser) {
         throw new Error("Please sign in first.");
       }
 
-      const idToken = await user.getIdToken();
+      const idToken = await firebaseUser.getIdToken();
 
       const response = await fetch("/api/theses/verifyAccess", {
         method: "POST",
