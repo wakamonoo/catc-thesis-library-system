@@ -1,4 +1,3 @@
-import cloudinary from "@/lib/cloudinary/config";
 import clientPromise from "@/lib/mongodb/config.js";
 import { v4 as uuidv4 } from "uuid";
 

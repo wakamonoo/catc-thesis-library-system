@@ -40,29 +40,45 @@ export default function SignInModal() {
       );
 
       const user = userCredential.user;
-
-      if (!user.emailVerified) {
-        await signOut(auth);
-
-        setErrorMessage("Please verify your email address before signing in.");
-        return;
-      }
-
       const idToken = await user.getIdToken();
-      const statusResponse = await fetch("/api/users/checkStatus", {
+
+      const adminResponse = await fetch("/api/admin/verify", {
         headers: {
           Authorization: `Bearer ${idToken}`,
         },
         cache: "no-store",
       });
-      const statusData = await statusResponse.json();
 
-      if (!statusResponse.ok) {
-        await signOut(auth);
-        setErrorMessage(
-          statusData.message || "This student account is not active.",
-        );
-        return;
+      if (!adminResponse.ok && adminResponse.status !== 403) {
+        throw new Error("Failed to verify administrator access.");
+      }
+
+      if (!adminResponse.ok) {
+        if (!user.emailVerified) {
+          await signOut(auth);
+
+          setErrorMessage(
+            "Please verify your email address before signing in.",
+          );
+          return;
+        }
+
+        const statusResponse = await fetch("/api/users/checkStatus", {
+          headers: {
+            Authorization: `Bearer ${idToken}`,
+          },
+          cache: "no-store",
+        });
+
+        const statusData = await statusResponse.json();
+
+        if (!statusResponse.ok) {
+          await signOut(auth);
+          setErrorMessage(
+            statusData.message || "This student account is not active.",
+          );
+          return;
+        }
       }
 
       setShowSignInModal(false);
@@ -114,7 +130,9 @@ export default function SignInModal() {
           break;
 
         default:
-          setErrorMessage("Something went wrong. Please try again.");
+          setErrorMessage(
+            err.message || "Something went wrong. Please try again.",
+          );
       }
     } finally {
       setIsSubmitting(false);

@@ -194,7 +194,7 @@ export default function StudentsPage() {
             </p>
           </div>
 
-          <div className="sm:w-44">
+          <div className="ml-auto flex w-full md:w-fit">
             <TertiaryButton onClick={() => setShowAddStudentModal(true)}>
               <MdAdd className="text-base text-panel shrink-0" />
               <p className="text-sm text-panel font-bold tracking-wide whitespace-nowrap">

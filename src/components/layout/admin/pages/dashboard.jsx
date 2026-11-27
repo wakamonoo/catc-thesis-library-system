@@ -1,9 +1,20 @@
 "use client";
-import { useContext } from "react";
-import { MdCalendarMonth, MdMenuBook, MdOutlinePersonAdd, MdPeople, MdPerson, MdPersonOff, MdSchool } from "react-icons/md";
+import { useContext, useState } from "react";
+import {
+  MdAdd,
+  MdCalendarMonth,
+  MdMenuBook,
+  MdOutlinePersonAdd,
+  MdPeople,
+  MdPerson,
+  MdPersonOff,
+  MdSchool,
+} from "react-icons/md";
 import StatCard from "@/components/layout/admin/statCard";
 import { ThesisContext } from "@/context/thesisContext";
 import { StudentContext } from "@/context/studentContext";
+import TertiaryButton from "@/components/buttons/tertiaryButton";
+import AddAdminModal from "@/components/modals/addAdminModal";
 
 export default function Dashboard() {
   const { theses } = useContext(ThesisContext);
@@ -13,6 +24,7 @@ export default function Dashboard() {
     unRegisteredStudents,
     suspendedStudents,
   } = useContext(StudentContext);
+  const [showAddAdminModal, setShowAddAdminModal] = useState(false);
 
   return (
     <>
@@ -25,6 +37,14 @@ export default function Dashboard() {
             <p className="text-sm text-muted">
               Manage your college’s academic research.
             </p>
+          </div>
+          <div className="ml-auto flex w-full md:w-fit">
+            <TertiaryButton onClick={() => setShowAddAdminModal(true)}>
+              <MdAdd className="text-base text-panel shrink-0" />
+              <p className="text-sm text-panel font-bold tracking-wide whitespace-nowrap">
+                Add Administrator
+              </p>
+            </TertiaryButton>
           </div>
         </div>
         <div className="mt-8 grid gap-4 grid-cols-1 lg:grid-cols-4">
@@ -72,6 +92,9 @@ export default function Dashboard() {
           />
         </div>
       </section>
+      {showAddAdminModal && (
+        <AddAdminModal setShowAddAdminModal={setShowAddAdminModal} />
+      )}
     </>
   );
 }
