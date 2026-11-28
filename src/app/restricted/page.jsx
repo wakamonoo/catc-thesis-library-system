@@ -2,37 +2,21 @@ import { CiWarning } from "react-icons/ci";
 
 export default function RestrictedPage() {
   return (
-    <main className="min-h-screen flex items-center justify-center p-4 sm:p-8 md:p-16 lg:px-32 xl:px-64">
-      <div className="w-full max-w-md rounded-xl border border-panel bg-panel p-8 shadow-sm">
-        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-second">
-          <CiWarning className="text-4xl text-error shrink-0" />
-        </div>
-
-        <p className="mt-4 text-sm font-semibold uppercase tracking-wider text-muted">
-          Access Restricted
-        </p>
-
-        <p className="text-2xl font-bold text-accent">
-          School Network Required
-        </p>
-
-        <p className="mt-4 text-sm leading-tight text-muted">
-          This thesis library is only accessible through the school&apos;s
-          network. Please connect to the school&apos;s Wi-Fi or network to
-          continue browsing.
-        </p>
-
-        <div className="mt-4 rounded-lg bg-second p-4">
-          <p className="text-sm text-muted">
-            f you believe this is a mistake, please contact your school
-            administrator for assistance.
-          </p>
-        </div>
-
-        <p className="mt-8 text-xs text-muted uppercase tracking-widest text-center">
-          CATC Thesis Library System
-        </p>
+    <div className="flex min-h-screen w-full flex-col items-center justify-center bg-brand p-8 text-center">
+      <div className="flex h-20 w-20 items-center justify-center rounded-2xl border border-border bg-panel">
+        <CiWarning className="text-5xl text-muted" />
       </div>
-    </main>
+
+      <p className="mt-6 text-sm uppercase font-semibold tracking-widest text-accent">
+        Unauthorized Network
+      </p>
+
+      <h4 className="mt-2 text-2xl font-bold text-normal">Access Denied</h4>
+
+      <p className="mt-2 max-w-md text-sm leading-relaxed text-muted">
+        Access outside the school network is restricted. If you believe this is
+        an error, contact your school administrator.
+      </p>
+    </div>
   );
 }

@@ -69,7 +69,7 @@ export default function AdminGuard({ children }) {
           <MdLockOutline className="text-5xl text-muted" />
         </div>
 
-        <p className="mt-6 text-sm font-semibold tracking-widest text-accent">
+        <p className="mt-6 text-sm uppercase font-semibold tracking-widest text-accent">
           ERROR 403
         </p>
 

@@ -2,8 +2,12 @@ import { NextResponse } from "next/server";
 import { isSchoolNetwork } from "@/lib/auth/schoolNetwork";
 
 export function proxy(request) {
+  if (process.env.NODE_ENV === "development") {
+    return NextResponse.next();
+  }
+
   if (!isSchoolNetwork(request)) {
-    return NextResponse.redirect(new URL("/restricted", request.url));
+    return NextResponse.rewrite(new URL("/restricted", request.url));
   }
 
   return NextResponse.next();
