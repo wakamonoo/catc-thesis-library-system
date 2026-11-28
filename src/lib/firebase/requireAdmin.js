@@ -30,7 +30,9 @@ export async function requireAdmin(request) {
       authorized: true,
       uid: decoded.uid,
     };
-  } catch {
+  } catch (error) {
+    console.error("Require admin error:", error);
+
     return { authorized: false, status: 401 };
   }
 }
