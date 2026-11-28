@@ -215,7 +215,10 @@ export default function Library() {
       }
 
       closeThesisModals();
-      showThesisToast(data.message || "Thesis updated successfully.", "success");
+      showThesisToast(
+        data.message || "Thesis updated successfully.",
+        "success",
+      );
     } catch (err) {
       setThesisActionError(err.message || "Thesis action failed.");
       showThesisToast(err.message || "Thesis action failed.", "error");
@@ -248,7 +251,7 @@ export default function Library() {
           </MenuButton>
         </div>
       </div>
-      <div className="mt-8 grid gap-4 grid-cols-1 lg:grid-cols-3">
+      <div className="mt-8 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         <StatCard
           label="Total Theses"
           value={theses.length}

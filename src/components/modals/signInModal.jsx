@@ -15,6 +15,7 @@ export default function SignInModal() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const {
+    setResetEmailPassword,
     setShowSignInModal,
     setShowRegistrationModal,
     setShowResetPasswordModal,
@@ -227,6 +228,7 @@ export default function SignInModal() {
           <div className="flex justify-end w-full">
             <button
               onClick={() => {
+                setResetEmailPassword(email);
                 setShowSignInModal(false);
                 setShowResetPasswordModal(true);
               }}

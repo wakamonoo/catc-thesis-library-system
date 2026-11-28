@@ -14,6 +14,7 @@ export const AuthenticationProvider = ({ children }) => {
   const [showSignOutModal, setShowSignOutModal] = useState(false);
   const [showResetPasswordModal, setShowResetPasswordModal] = useState(false);
   const [showRegistrationModal, setShowRegistrationModal] = useState(false);
+  const [resetEmailPassword, setResetEmailPassword] = useState("");
   const [firebaseUser, setFirebaseUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -24,7 +25,7 @@ export const AuthenticationProvider = ({ children }) => {
     });
 
     return () => unsubscribe();
-  });
+  }, []);
 
   const isSignedIn = !!firebaseUser;
 
@@ -42,6 +43,8 @@ export const AuthenticationProvider = ({ children }) => {
         isSignedIn,
         isEmailVerified,
         signOutUser,
+        resetEmailPassword,
+        setResetEmailPassword,
         setShowSignInModal,
         setShowSignOutModal,
         setShowRegistrationModal,

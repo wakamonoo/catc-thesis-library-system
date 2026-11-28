@@ -9,14 +9,22 @@ import MenuButton from "@/components/buttons/menuButton";
 import { PiStudent } from "react-icons/pi";
 import { BiBook } from "react-icons/bi";
 import AdminOptions from "@/components/options/adminOptions";
-import { UserContext } from "@/context/userContext";
+import { AccountContext } from "@/context/accountContext";
 
 export default function Aside() {
-  const { user } = useContext(UserContext);
+  const { account } = useContext(AccountContext);
   const [showAdminOptions, setShowAdminOptions] = useState(false);
   const adminOptionsButtonRef = useRef(null);
   const { handleHomeClick, activeAdminPage, handleAdminNavigation } =
     useContext(NavigationContext);
+
+  const getInitial = (name) =>
+    name
+      .split(" ")
+      .map((word) => word[0])
+      .slice(0, 2)
+      .join("")
+      .toUpperCase();
 
   return (
     <aside className="flex w-full shrink-0 flex-col border-b border-(--color-border) bg-accent px-4 py-5 md:fixed md:inset-y-0 md:w-64 md:border-b-0 md:border-r md:px-4 md:py-7">
@@ -72,12 +80,16 @@ export default function Aside() {
 
       <div className="relative ml-auto md:ml-0 px-2">
         <div className="flex items-center gap-2 p-2 rounded text-left">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-yellow text-accent text-sm font-semibold">
-            Y
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-yellow">
+            <p className="uppercase text-accent text-sm font-semibold">
+              {getInitial(account?.name || "Administrator")}
+            </p>
           </div>
 
           <div className="min-w-0">
-            <p className="truncate text-sm font-bold text-panel">{user?.name}</p>
+            <p className="truncate text-sm font-bold text-panel">
+              {account?.name}
+            </p>
             <p className="text-xs text-muted">Administrator</p>
           </div>
 

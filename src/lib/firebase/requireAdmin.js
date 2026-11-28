@@ -1,11 +1,6 @@
 import adminAuth from "@/lib/firebase/admin.js";
 import clientPromise from "../mongodb/config";
 
-const ADMIN_UIDS = (process.env.ADMIN_UIDS || "")
-  .split(",")
-  .map((uid) => uid.trim())
-  .filter(Boolean);
-
 export async function requireAdmin(request) {
   const authorization = request.headers.get("authorization");
   const token = authorization?.startsWith("Bearer ")
@@ -19,15 +14,11 @@ export async function requireAdmin(request) {
   try {
     const decoded = await adminAuth.verifyIdToken(token);
 
-    if (ADMIN_UIDS.includes(decoded.uid)) {
-      return { authorized: true, uid: decoded.uid };
-    }
-
     const client = await clientPromise;
     const mongodb = process.env.MONGODB;
     const db = client.db(mongodb);
 
-    const admin = await db.collection("administrators").findOne({
+    const admin = await db.collection("admins").findOne({
       uid: decoded.uid,
     });
 

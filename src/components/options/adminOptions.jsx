@@ -3,12 +3,16 @@ import { useContext, useEffect, useRef } from "react";
 import { FaUser } from "react-icons/fa";
 import ActionButton from "../buttons/actionButton";
 import { FaRightFromBracket } from "react-icons/fa6";
+import { AuthenticationContext } from "@/context/authenticationContext";
+import { useRouter } from "next/navigation";
 
 export default function AdminOptions({
   setShowAdminOptions,
   adminOptionsButtonRef,
 }) {
   const divRef = useRef(null);
+  const router = useRouter();
+  const { signOutUser } = useContext(AuthenticationContext);
 
   useEffect(() => {
     function handleOutClick(e) {
@@ -48,7 +52,11 @@ export default function AdminOptions({
       ref={divRef}
       className="absolute bottom-full right-2 md:left-36 h-fit w-60 border border-navy bg-accent rounded-2xl p-2 shadow-2xl overflow-hidden z-100"
     >
-      <ActionButton>
+      <ActionButton
+        onClick={async () => {
+          await signOutUser();
+        }}
+      >
         <FaRightFromBracket className="text-base text-panel shrink-0" />
         <p className="text-sm text-panel font-bold tracking-wide">Sign Out</p>
       </ActionButton>

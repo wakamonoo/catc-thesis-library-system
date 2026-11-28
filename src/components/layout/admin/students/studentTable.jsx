@@ -1,6 +1,7 @@
 import StudentRow from "./studentRow";
 import StudentEmptyState from "./emptyCollection";
 import { useState } from "react";
+import EmptyCollection from "./emptyCollection";
 
 export default function StudentTable({
   students,
@@ -16,7 +17,9 @@ export default function StudentTable({
 
   return (
     <div className="mt-4 overflow-hidden rounded-lg border border-border bg-panel shadow-sm">
-      <div className="w-full min-h-[80vh] overflow-x-auto">
+      <div
+        className={`w-full ${students.length > 0 ? "min-h-[80vh]" : "h-fit"}  overflow-x-auto`}
+      >
         <table className="w-full border-collapse text-left">
           <thead className="bg-brand">
             <tr className="border-b border-border">
@@ -55,7 +58,7 @@ export default function StudentTable({
             ) : (
               <tr>
                 <td colSpan={5} className="p-0">
-                  <StudentEmptyState
+                  <EmptyCollection
                     hasFilters={hasFilters}
                     setShowAddStudentModal={setShowAddStudentModal}
                   />

@@ -2,9 +2,12 @@ import { MdPeople } from "react-icons/md";
 
 import TertiaryButton from "@/components/buttons/tertiaryButton";
 
-export default function EmptyCollection({ hasFilters, setShowAddThesisModal }) {
+export default function EmptyCollection({
+  hasFilters,
+  setShowAddStudentModal,
+}) {
   return (
-    <div className="mt-4 flex flex-col items-center justify-center rounded-lg border border-dashed border-border bg-panel p-8">
+    <div className="mt-4 flex flex-col items-center justify-center rounded-lg p-8">
       <div className="flex h-14 w-14 items-center justify-center rounded-full bg-second">
         <MdPeople className="shrink-0 text-4xl text-muted" />
       </div>
@@ -16,14 +19,14 @@ export default function EmptyCollection({ hasFilters, setShowAddThesisModal }) {
           ? "Try changing your search or filters."
           : "There are currently no student records."}
       </p>
+
       <div className="mt-2 w-fit">
-        <TertiaryButton onClick={() => setShowAddThesisModal(true)}>
+        <TertiaryButton onClick={() => setShowAddStudentModal(true)}>
           <p className="whitespace-nowrap text-sm font-bold tracking-wide text-panel">
-            Add Thesis
+            Add Student
           </p>
         </TertiaryButton>
       </div>
-      ,
     </div>
   );
 }

@@ -16,6 +16,7 @@ export default function StudentRow({
   onDeleteStudent,
 }) {
   const studentOptionsButtonRef = useRef(null);
+  
   const getInitials = (name) =>
     name
       .split(" ")

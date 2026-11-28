@@ -27,8 +27,8 @@ export default function Page() {
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <MdVerifiedUser className="text-base shrink-0" />
-                  <p className="text-sm font-semibold hidden md:block">
+                  <MdVerifiedUser className="text-base text-success shrink-0" />
+                  <p className="text-sm font-semibold text-success hidden md:block">
                     Admin Access
                   </p>
                 </div>

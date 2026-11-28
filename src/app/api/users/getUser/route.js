@@ -24,8 +24,12 @@ export async function GET(request) {
 
   try {
     const client = await clientPromise;
-    const db = client.db(process.env.MONGODB);
-    const user = await db.collection("users").findOne({ uid: firebaseUser.uid });
+    const mongodb = process.env.MONGODB;
+    const db = client.db(mongodb);
+
+    const user = await db
+      .collection("users")
+      .findOne({ uid: firebaseUser.uid });
 
     if (!user) {
       return Response.json(
@@ -34,7 +38,7 @@ export async function GET(request) {
       );
     }
 
-    return Response.json({ success: true, user });
+    return Response.json({ success: true, account: user });
   } catch (err) {
     console.error("Failed to fetch user:", err);
     return Response.json(

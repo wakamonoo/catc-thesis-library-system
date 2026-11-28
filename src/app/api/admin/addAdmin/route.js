@@ -41,7 +41,7 @@ export async function POST(request) {
     const normalizedEmail = email.trim().toLowerCase();
 
     const existingAdmin = await db
-      .collection("administrators")
+      .collection("admins")
       .findOne({ email: normalizedEmail });
 
     if (existingAdmin) {
@@ -67,7 +67,7 @@ export async function POST(request) {
       createdAt: new Date(),
     };
 
-    await db.collection("administrators").insertOne(newAdmin);
+    await db.collection("admins").insertOne(newAdmin);
 
     return Response.json({
       success: true,

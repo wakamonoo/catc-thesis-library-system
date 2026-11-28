@@ -9,25 +9,27 @@ import { auth } from "@/lib/firebase/config";
 import { BiArrowBack } from "react-icons/bi";
 
 export default function ResetPasswordModal() {
-  const [email, setEmail] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const { setShowSignInModal, setShowResetPasswordModal } = useContext(
-    AuthenticationContext,
-  );
+  const {
+    resetEmailPassword,
+    setResetEmailPassword,
+    setShowSignInModal,
+    setShowResetPasswordModal,
+  } = useContext(AuthenticationContext);
 
   const handleResetPassword = async (e) => {
     e.preventDefault();
 
     setErrorMessage("");
 
-    if (!email.trim()) {
+    if (!resetEmailPassword.trim()) {
       setErrorMessage("Please enter your email address.");
       return;
     }
 
     try {
-      await sendPasswordResetEmail(auth, email.trim());
+      await sendPasswordResetEmail(auth, resetEmailPassword.trim());
 
       setSuccessMessage(
         "Reset link sent, kindly check your email. Once done please go back to the sign-in page.",
@@ -101,8 +103,8 @@ export default function ResetPasswordModal() {
               id="reset-email"
               type="email"
               placeholder="Enter your email address"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={resetEmailPassword}
+              onChange={(e) => setResetEmailPassword(e.target.value)}
               className="w-full rounded-lg bg-panel px-4 py-2 text-sm text-normal outline-none placeholder:text-muted"
             />
           </div>
