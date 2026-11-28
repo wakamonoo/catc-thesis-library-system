@@ -1,4 +1,4 @@
-import { cert, getApps, initializeApp } from "firebase-admin";
+import { cert, getApps, initializeApp } from "firebase-admin/app";
 import { getAuth } from "firebase-admin/auth";
 
 const apps = getApps();
