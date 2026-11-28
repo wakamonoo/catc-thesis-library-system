@@ -7,6 +7,11 @@ export function isSchoolNetwork(request) {
     return false;
   }
 
+  //—————————————————————————————remove after—————————————————————————————//
+  if (allowedIPs.includes("*")) {
+    return true;
+  }
+
   const clientIP = request.headers
     .get("x-forwarded-for")
     ?.split(",")[0]

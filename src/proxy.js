@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { isSchoolNetwork } from "@/lib/auth/schoolNetwork";
 
 export function proxy(request) {
+  //—————————————————————————————for development—————————————————————————————//
   if (process.env.NODE_ENV === "development") {
     return NextResponse.next();
   }
